@@ -30,9 +30,15 @@ export default class Car {
 
   update() {
     this.speed += this.acceleration;
+    if (this.speed < 0) {
+      this.speed = 0;
+      this.acceleration = 0;
+    }
+
     this.y -= Math.cos(this.angle) * this.speed;
     // this.x += Math.sin(this.angle) * this.speed;
     // console.log(this.speed, this.x, this.y, this.angle);
+    // console.log(this.acceleration, this.speed, this.y, this.angle);
   }
 
   turnLeft() {
@@ -47,10 +53,12 @@ export default class Car {
       this.speed = this.maxSpeed;
     }
   }
-  deccelerate() {
+  brake() {
     this.acceleration -= 0.1;
+    this.speed += this.acceleration;
     if (this.speed < 0) {
       this.speed = 0;
+      this.acceleration = 0;
     }
   }
 

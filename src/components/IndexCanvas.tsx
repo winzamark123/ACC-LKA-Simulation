@@ -11,7 +11,7 @@ interface IndexCanvasProps {
 
 export default function IndexCanvas({ width, height }: IndexCanvasProps) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
-  const carRef = useRef(new Car(50, 50, 100, 100));
+  const carRef = useRef(new Car(50, 500, 100, 100));
 
   useCarControls(carRef.current);
 

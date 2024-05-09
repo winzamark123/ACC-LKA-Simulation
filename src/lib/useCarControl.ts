@@ -9,7 +9,7 @@ export default function useCarControls(car: Car) {
           car.accelerate();
           break;
         case 'ArrowDown':
-          car.deccelerate();
+          car.brake();
           break;
         case 'ArrowLeft':
           car.turnLeft();
