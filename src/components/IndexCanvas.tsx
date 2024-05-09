@@ -1,5 +1,6 @@
 import { useRef, useEffect } from 'react';
 import Car from './Car';
+import useCarControls from '@/lib/useCarControl';
 
 interface IndexCanvasProps {
   width: number;
@@ -10,23 +11,30 @@ interface IndexCanvasProps {
 
 export default function IndexCanvas({ width, height }: IndexCanvasProps) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
-  const mainCar = new Car(50, 50, 100, 100);
+  const carRef = useRef(new Car(50, 50, 100, 100));
+
+  useCarControls(carRef.current);
 
   useEffect(() => {
     const canvas = canvasRef.current;
+
     if (canvas === null) {
       return;
     }
+
     const context = canvas.getContext('2d');
 
     if (context === null) {
       return;
     }
+    const draw = () => {
+      context.clearRect(0, 0, canvas.width, canvas.height);
+      carRef.current.draw(context);
+      carRef.current.update(); // Update car state
+      requestAnimationFrame(draw); // Continuously redraw the canvas
+    };
 
-    // Draw a simple rectangle
-    context.fillStyle = '#0000FF'; // blue color
-    context.fillRect(10, 10, 150, 100); // draws a rectangle
-    mainCar.draw(context);
+    draw();
   }, []);
 
   return (
