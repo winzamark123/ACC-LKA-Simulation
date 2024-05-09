@@ -24,7 +24,7 @@ export default class Car {
   }
 
   draw(context: CanvasRenderingContext2D) {
-    context.fillStyle = 'red';
+    context.fillStyle = 'blue';
     context.fillRect(this.x, this.y, this.width, this.height); // draws a rectangle
   }
 
@@ -36,10 +36,13 @@ export default class Car {
     }
 
     this.y -= Math.cos(this.angle) * this.speed;
-    // this.x += Math.sin(this.angle) * this.speed;
-    // console.log(this.speed, this.x, this.y, this.angle);
-    // console.log(this.acceleration, this.speed, this.y, this.angle);
   }
+
+  /*
+  ////////////////////////
+    CAR Actions that are Controlled by useCarControls
+  ////////////////////////
+  */
 
   turnLeft() {
     this.angle -= 0.1;
