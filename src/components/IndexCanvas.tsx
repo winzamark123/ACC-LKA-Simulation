@@ -29,8 +29,8 @@ export default function IndexCanvas({ width, height }: IndexCanvasProps) {
     }
     const draw = () => {
       context.clearRect(0, 0, canvas.width, canvas.height);
-      carRef.current.draw(context);
       carRef.current.update(); // Update car state
+      carRef.current.draw(context);
       requestAnimationFrame(draw); // Continuously redraw the canvas
     };
 
