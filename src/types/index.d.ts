@@ -9,7 +9,9 @@ export interface CarInterface {
 
   speed: number;
   acceleration: number;
+
   ACCELERATION_RATE: number;
+  TURNING_RATE: number;
   BRAKING_RATE: number;
 
   drag_force: number;

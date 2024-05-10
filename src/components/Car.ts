@@ -13,7 +13,9 @@ export default class Car implements CarInterface {
 
   speed: number;
   acceleration: number;
+
   ACCELERATION_RATE: number = 0.1;
+  TURNING_RATE: number = 0.1;
   BRAKING_RATE: number = 0.5;
 
   drag_force: number;
@@ -39,8 +41,16 @@ export default class Car implements CarInterface {
   }
 
   draw(context: CanvasRenderingContext2D) {
-    context.fillStyle = 'blue';
-    context.fillRect(this.x, this.y, this.width, this.height); // draws a rectangle
+    context.save(); // Save the current state
+    context.translate(this.x + this.width / 2, this.y + this.height / 2); // Move to the center of the car
+    context.rotate(this.angle); // Rotate the canvas by the car's angle
+    context.fillRect(
+      -this.width / 2,
+      -this.height / 2,
+      this.width,
+      this.height
+    ); // Draw the car centered at the origin
+    context.restore(); // Restore the state
   }
 
   updateAcceleration() {
@@ -63,6 +73,9 @@ export default class Car implements CarInterface {
     }
 
     this.y -= Math.cos(this.angle) * this.speed;
+    this.x += Math.sin(this.angle) * this.speed;
+
+    console.log(this.speed, this.acceleration, this.angle);
   }
 
   /*
@@ -72,10 +85,11 @@ export default class Car implements CarInterface {
   */
 
   turnLeft() {
-    this.angle -= 0.1;
+    // this.angle -= this.TURNING_RATE * (this.speed / this.maxSpeed); // Scale turn rate by speed ratio
+    this.angle -= this.TURNING_RATE;
   }
   turnRight() {
-    this.angle += 0.1;
+    this.angle += this.TURNING_RATE * (this.speed / this.maxSpeed); // Scale turn rate by speed ratio
   }
   accelerate() {
     this.acceleration += this.ACCELERATION_RATE;
