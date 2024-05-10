@@ -1,12 +1,26 @@
-export type CarType = {
+export interface CarInterface {
   x: number;
   y: number;
   width: number;
   height: number;
 
+  frontal_area: number;
+  mass: number;
+
   speed: number;
   acceleration: number;
+  ACCELERATION_RATE: number;
+  BRAKING_RATE: number;
+
+  drag_force: number;
+
   maxSpeed: number;
-  friction: number;
   angle: number;
+}
+
+export type DragForceParams = {
+  speed: number;
+  drag_coefficient: number;
+  area: number;
+  air_density: number;
 };
