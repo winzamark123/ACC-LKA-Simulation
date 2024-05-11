@@ -6,6 +6,7 @@ export interface CarInterface {
 
   frontal_area: number;
   mass: number;
+  maxSpeed: number;
 
   speed: number;
   acceleration: number;
@@ -14,7 +15,7 @@ export interface CarInterface {
   TURNING_RATE: number;
   BRAKING_RATE: number;
 
-  maxSpeed: number;
+  drag_acceleration: number;
   angle: number;
 
   controls: CarControlsInterface;
@@ -34,4 +35,5 @@ export type DragForceParams = {
   drag_coefficient: number;
   area: number; //m^2
   air_density: number; //kg/m^3
+  mass: number; //kg
 };

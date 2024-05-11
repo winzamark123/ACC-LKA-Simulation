@@ -1,7 +1,7 @@
 import { CarInterface, CarControlsInterface } from '@/types';
-// import { AIR_DENSITY, DRAG_COEFFICIENT } from '@/lib/physicsConstants';
-// import { calcDragForce, forceMassToAcceleration } from '@/lib/useEquations';
 import CarControls from '@/components/CarControls';
+import { calcDragAcceleration } from '@/lib/useEquations';
+import { AIR_DENSITY, DRAG_COEFFICIENT } from '@/lib/physicsConstants';
 
 /*
   Typical Car with the following parameters:
@@ -13,24 +13,28 @@ import CarControls from '@/components/CarControls';
 */
 
 export default class Car implements CarInterface {
+  // Car Size
   x: number;
   y: number;
   width: number;
   height: number;
 
+  // Car Attributes
   frontal_area: number;
   mass: number;
-
-  speed: number;
-  acceleration: number;
-
+  maxSpeed: number;
   ACCELERATION_RATE: number = 0.03;
   TURNING_RATE: number = 0.01;
   BRAKING_RATE: number = 0.05;
 
-  maxSpeed: number;
+  // Car Movement
+  speed: number;
+  acceleration: number;
+
+  drag_acceleration: number;
   angle: number;
 
+  // Car Controls
   controls: CarControlsInterface;
 
   constructor(x: number, y: number, width: number, height: number) {
@@ -39,13 +43,15 @@ export default class Car implements CarInterface {
     this.width = width;
     this.height = height;
 
+    this.maxSpeed = 5;
+    this.mass = 1500;
+    this.frontal_area = 5;
+
     this.speed = 0;
     this.acceleration = 0;
-    this.maxSpeed = 0;
     this.angle = 0;
 
-    this.mass = 1500;
-    this.frontal_area = 2.2;
+    this.drag_acceleration = 0;
 
     this.controls = new CarControls();
   }
@@ -78,6 +84,18 @@ export default class Car implements CarInterface {
 
   update() {
     this.move();
+    console.log(
+      'speed:',
+      this.speed,
+      'accelerate:',
+      this.acceleration,
+      'angle:',
+      this.angle,
+      'x:',
+      this.x,
+      'y:',
+      this.y
+    );
   }
 
   /*
@@ -103,21 +121,44 @@ export default class Car implements CarInterface {
       this.acceleration = 0;
     }
   }
+  stopAcceleration() {
+    this.acceleration = 0;
+  }
+
   move() {
+    // Car Controls Forward
     if (this.controls.forward) {
       this.speed += this.ACCELERATION_RATE;
     }
+
+    // Car Controls Backward
     if (this.controls.backward) {
       this.speed -= this.BRAKING_RATE;
     }
+
+    // Car Drag
     if (this.speed > 0) {
-      this.speed -= 0.01;
+      this.drag_acceleration = calcDragAcceleration({
+        speed: this.speed,
+        drag_coefficient: DRAG_COEFFICIENT,
+        area: this.frontal_area,
+        air_density: AIR_DENSITY,
+        mass: this.mass,
+      });
+
+      this.speed -= this.drag_acceleration;
     }
+
+    // Speed Limits
     if (this.speed < 0) {
       this.speed = 0;
     }
 
-    // Handles turning with Speed
+    if (this.speed > this.maxSpeed) {
+      this.speed = this.maxSpeed;
+    }
+
+    // Handles turns with Speed
     if (this.speed != 0) {
       if (this.controls.left) {
         this.turnLeft();
@@ -127,12 +168,8 @@ export default class Car implements CarInterface {
       }
     }
 
+    // Update Position of the Car
     this.x += Math.sin(this.angle) * this.speed;
     this.y -= Math.cos(this.angle) * this.speed;
   }
-
-  stopAcceleration() {
-    this.acceleration = 0;
-  }
-  stopTurning() {}
 }
