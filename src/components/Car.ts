@@ -1,6 +1,7 @@
-import { CarInterface } from '@/types';
-import { AIR_DENSITY, DRAG_COEFFICIENT } from '@/lib/physicsConstants';
-import { calcDragForce, forceMassToAcceleration } from '@/lib/useEquations';
+import { CarInterface, CarControlsInterface } from '@/types';
+// import { AIR_DENSITY, DRAG_COEFFICIENT } from '@/lib/physicsConstants';
+// import { calcDragForce, forceMassToAcceleration } from '@/lib/useEquations';
+import CarControls from '@/components/CarControls';
 
 /*
   Typical Car with the following parameters:
@@ -23,15 +24,14 @@ export default class Car implements CarInterface {
   speed: number;
   acceleration: number;
 
-  ACCELERATION_RATE: number = 0.3;
-  TURNING_RATE: number = 0.1;
-  BRAKING_RATE: number = 0.5;
-
-  drag_force: number;
+  ACCELERATION_RATE: number = 0.03;
+  TURNING_RATE: number = 0.01;
+  BRAKING_RATE: number = 0.05;
 
   maxSpeed: number;
   angle: number;
 
+  controls: CarControlsInterface;
 
   constructor(x: number, y: number, width: number, height: number) {
     this.x = x;
@@ -47,7 +47,20 @@ export default class Car implements CarInterface {
     this.mass = 1500;
     this.frontal_area = 2.2;
 
-    this.drag_force = 0;
+    this.controls = new CarControls();
+  }
+
+  setupControls() {
+    const handleKeyDownBound = this.controls.handleKeyDown.bind(this.controls);
+    const handleKeyUpBound = this.controls.handleKeyUp.bind(this.controls);
+
+    window.addEventListener('keydown', handleKeyDownBound);
+    window.addEventListener('keyup', handleKeyUpBound);
+
+    return () => {
+      window.removeEventListener('keydown', handleKeyDownBound);
+      window.removeEventListener('keyup', handleKeyUpBound);
+    };
   }
 
   draw(context: CanvasRenderingContext2D) {
@@ -63,28 +76,8 @@ export default class Car implements CarInterface {
     context.restore(); // Restore the state
   }
 
-  updateAcceleration() {
-    this.drag_force = calcDragForce({
-      speed: this.speed,
-      drag_coefficient: DRAG_COEFFICIENT,
-      area: this.frontal_area,
-      air_density: AIR_DENSITY,
-    });
-
-    this.acceleration -= forceMassToAcceleration(this.drag_force, this.mass);
-  }
-
   update() {
-    this.updateAcceleration();
-    this.speed += this.acceleration;
-
-    if (this.speed < 0.01 && this.acceleration < 0) {
-      this.speed = 0;
-      this.acceleration = 0;
-    }
-
-    this.y -= Math.cos(this.angle) * this.speed;
-    this.x += Math.sin(this.angle) * this.speed;
+    this.move();
   }
 
   /*
@@ -109,6 +102,33 @@ export default class Car implements CarInterface {
       this.speed = 0;
       this.acceleration = 0;
     }
+  }
+  move() {
+    if (this.controls.forward) {
+      this.speed += this.ACCELERATION_RATE;
+    }
+    if (this.controls.backward) {
+      this.speed -= this.BRAKING_RATE;
+    }
+    if (this.speed > 0) {
+      this.speed -= 0.01;
+    }
+    if (this.speed < 0) {
+      this.speed = 0;
+    }
+
+    // Handles turning with Speed
+    if (this.speed != 0) {
+      if (this.controls.left) {
+        this.turnLeft();
+      }
+      if (this.controls.right) {
+        this.turnRight();
+      }
+    }
+
+    this.x += Math.sin(this.angle) * this.speed;
+    this.y -= Math.cos(this.angle) * this.speed;
   }
 
   stopAcceleration() {

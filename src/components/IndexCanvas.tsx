@@ -1,6 +1,6 @@
 import { useRef, useEffect } from 'react';
 import Car from './Car';
-import useCarControls from '@/lib/useCarControl';
+// import useCarControls from '@/lib/useCarControl';
 
 interface IndexCanvasProps {
   width: number;
@@ -9,9 +9,12 @@ interface IndexCanvasProps {
 
 export default function IndexCanvas({ width, height }: IndexCanvasProps) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
-  const carRef = useRef(new Car(50, 500, 100, 100));
+  const mainCar = new Car(50, 500, 100, 100);
+  const carRef = useRef(mainCar);
 
-  useCarControls(carRef.current);
+  mainCar.setupControls();
+
+  // useCarControls(carRef.current);
 
   useEffect(() => {
     const canvas = canvasRef.current;

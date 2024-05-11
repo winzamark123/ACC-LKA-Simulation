@@ -14,12 +14,10 @@ export interface CarInterface {
   TURNING_RATE: number;
   BRAKING_RATE: number;
 
-  drag_force: number;
-
   maxSpeed: number;
   angle: number;
 
-  // controls: CarControlsInterface;
+  controls: CarControlsInterface;
 }
 
 export interface CarControlsInterface {
@@ -27,6 +25,8 @@ export interface CarControlsInterface {
   backward: boolean;
   left: boolean;
   right: boolean;
+  handleKeyDown(event: KeyboardEvent): void;
+  handleKeyUp(event: KeyboardEvent): void;
 }
 
 export type DragForceParams = {
