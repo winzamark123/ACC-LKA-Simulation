@@ -7,8 +7,6 @@ interface IndexCanvasProps {
   height: number;
 }
 
-// RequestAnimationFrame?
-
 export default function IndexCanvas({ width, height }: IndexCanvasProps) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const carRef = useRef(new Car(50, 500, 100, 100));

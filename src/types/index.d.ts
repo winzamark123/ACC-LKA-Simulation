@@ -18,11 +18,20 @@ export interface CarInterface {
 
   maxSpeed: number;
   angle: number;
+
+  // controls: CarControlsInterface;
+}
+
+export interface CarControlsInterface {
+  forward: boolean;
+  backward: boolean;
+  left: boolean;
+  right: boolean;
 }
 
 export type DragForceParams = {
-  speed: number;
+  speed: number; //m/s
   drag_coefficient: number;
-  area: number;
-  air_density: number;
+  area: number; //m^2
+  air_density: number; //kg/m^3
 };

@@ -1,6 +1,15 @@
 import { CarInterface } from '@/types';
 import { AIR_DENSITY, DRAG_COEFFICIENT } from '@/lib/physicsConstants';
-import { calcDragForce } from '@/lib/useEquations';
+import { calcDragForce, forceMassToAcceleration } from '@/lib/useEquations';
+
+/*
+  Typical Car with the following parameters:
+  - x, y: position of the car
+  - width, height: dimensions of the car
+  - frontal_area: 2.2
+  - mass: 1500
+  - acceleration_rate: 0.3 (m/s^2)
+*/
 
 export default class Car implements CarInterface {
   x: number;
@@ -14,7 +23,7 @@ export default class Car implements CarInterface {
   speed: number;
   acceleration: number;
 
-  ACCELERATION_RATE: number = 0.1;
+  ACCELERATION_RATE: number = 0.3;
   TURNING_RATE: number = 0.1;
   BRAKING_RATE: number = 0.5;
 
@@ -22,6 +31,7 @@ export default class Car implements CarInterface {
 
   maxSpeed: number;
   angle: number;
+
 
   constructor(x: number, y: number, width: number, height: number) {
     this.x = x;
@@ -31,11 +41,11 @@ export default class Car implements CarInterface {
 
     this.speed = 0;
     this.acceleration = 0;
-    this.maxSpeed = 10;
+    this.maxSpeed = 0;
     this.angle = 0;
 
-    this.mass = 1000;
-    this.frontal_area = 2;
+    this.mass = 1500;
+    this.frontal_area = 2.2;
 
     this.drag_force = 0;
   }
@@ -60,22 +70,21 @@ export default class Car implements CarInterface {
       area: this.frontal_area,
       air_density: AIR_DENSITY,
     });
-    this.acceleration -= this.drag_force / this.mass;
+
+    this.acceleration -= forceMassToAcceleration(this.drag_force, this.mass);
   }
 
   update() {
     this.updateAcceleration();
     this.speed += this.acceleration;
 
-    if (this.speed < 0) {
+    if (this.speed < 0.01 && this.acceleration < 0) {
       this.speed = 0;
       this.acceleration = 0;
     }
 
     this.y -= Math.cos(this.angle) * this.speed;
     this.x += Math.sin(this.angle) * this.speed;
-
-    console.log(this.speed, this.acceleration, this.angle);
   }
 
   /*
@@ -85,17 +94,13 @@ export default class Car implements CarInterface {
   */
 
   turnLeft() {
-    // this.angle -= this.TURNING_RATE * (this.speed / this.maxSpeed); // Scale turn rate by speed ratio
     this.angle -= this.TURNING_RATE;
   }
   turnRight() {
-    this.angle += this.TURNING_RATE * (this.speed / this.maxSpeed); // Scale turn rate by speed ratio
+    this.angle += this.TURNING_RATE;
   }
   accelerate() {
     this.acceleration += this.ACCELERATION_RATE;
-    if (this.speed > this.maxSpeed) {
-      this.speed = this.maxSpeed;
-    }
   }
   brake() {
     this.acceleration -= this.BRAKING_RATE;
