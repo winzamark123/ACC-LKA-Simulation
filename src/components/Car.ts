@@ -1,7 +1,12 @@
 import { CarInterface, CarControlsInterface } from '@/types';
 import CarControls from '@/components/CarControls';
 import { calcDragAcceleration } from '@/lib/useEquations';
-import { AIR_DENSITY, DRAG_COEFFICIENT } from '@/lib/physicsConstants';
+import {
+  ROAD_FRICTION,
+  GRAVITY,
+  AIR_DENSITY,
+  DRAG_COEFFICIENT,
+} from '@/lib/physicsConstants';
 
 /*
   Typical Car with the following parameters:
@@ -146,7 +151,9 @@ export default class Car implements CarInterface {
         mass: this.mass,
       });
 
-      this.speed -= this.drag_acceleration;
+      const friction_acceleration = ROAD_FRICTION * GRAVITY;
+
+      this.speed -= this.drag_acceleration + friction_acceleration;
     }
 
     // Speed Limits
