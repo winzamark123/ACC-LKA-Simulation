@@ -1,3 +1,20 @@
+export interface RoadInterface {
+  x: number;
+
+  top: number;
+  bottom: number;
+  left: number;
+  right: number;
+
+  width: number;
+  lane_count: number;
+}
+
+export type Point = {
+  x: number;
+  y: number;
+};
+
 export interface CarInterface {
   x: number;
   y: number;
@@ -6,6 +23,7 @@ export interface CarInterface {
 
   frontal_area: number;
   mass: number;
+  maxSpeed: number;
 
   speed: number;
   acceleration: number;
@@ -14,15 +32,25 @@ export interface CarInterface {
   TURNING_RATE: number;
   BRAKING_RATE: number;
 
-  drag_force: number;
-
-  maxSpeed: number;
+  drag_acceleration: number;
   angle: number;
+
+  controls: CarControlsInterface;
+}
+
+export interface CarControlsInterface {
+  forward: boolean;
+  backward: boolean;
+  left: boolean;
+  right: boolean;
+  handleKeyDown(event: KeyboardEvent): void;
+  handleKeyUp(event: KeyboardEvent): void;
 }
 
 export type DragForceParams = {
-  speed: number;
+  speed: number; //m/s
   drag_coefficient: number;
-  area: number;
-  air_density: number;
+  area: number; //m^2
+  air_density: number; //kg/m^3
+  mass: number; //kg
 };
