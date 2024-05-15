@@ -1,5 +1,5 @@
 import { CarInterface, CarControlsInterface } from '@/types';
-import CarControls from '@/components/CarControls';
+import CarControls from '@/components/Car/CarControls';
 import { calcDragAcceleration } from '@/lib/useEquations';
 import {
   ROAD_FRICTION,

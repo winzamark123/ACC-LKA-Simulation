@@ -1,3 +1,20 @@
+export interface RoadInterface {
+  x: number;
+
+  top: number;
+  bottom: number;
+  left: number;
+  right: number;
+
+  width: number;
+  lane_count: number;
+}
+
+export type Point = {
+  x: number;
+  y: number;
+};
+
 export interface CarInterface {
   x: number;
   y: number;
