@@ -11,11 +11,6 @@ export default class CarControls implements CarControlsInterface {
     this.backward = false;
     this.left = false;
     this.right = false;
-
-    if (typeof window !== 'undefined') {
-      window.addEventListener('keydown', this.handleKeyDown);
-      window.addEventListener('keyup', this.handleKeyUp);
-    }
   }
 
   handleKeyDown(event: KeyboardEvent) {

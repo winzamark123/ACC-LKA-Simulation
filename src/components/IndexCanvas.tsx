@@ -1,6 +1,7 @@
 import { useRef, useEffect } from 'react';
 import Car from './Car/Car';
 import Road from './Road/Road';
+import CarControls from './Car/CarControls';
 
 interface IndexCanvasProps {
   width: number;
@@ -17,6 +18,26 @@ export default function IndexCanvas({ width, height }: IndexCanvasProps) {
   const roadRef = useRef(road);
 
   mainCar.setupControls();
+  const carControls = useRef(new CarControls());
+
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) =>
+      carControls.current.handleKeyDown(event);
+    const handleKeyUp = (event: KeyboardEvent) =>
+      carControls.current.handleKeyUp(event);
+
+    if (typeof window !== 'undefined') {
+      window.addEventListener('keydown', handleKeyDown);
+      window.addEventListener('keyup', handleKeyUp);
+    }
+
+    return () => {
+      if (typeof window !== 'undefined') {
+        window.removeEventListener('keydown', handleKeyDown);
+        window.removeEventListener('keyup', handleKeyUp);
+      }
+    };
+  }, []);
 
   useEffect(() => {
     const canvas = canvasRef.current;

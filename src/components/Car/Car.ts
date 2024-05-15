@@ -62,16 +62,20 @@ export default class Car implements CarInterface {
   }
 
   setupControls() {
-    const handleKeyDownBound = this.controls.handleKeyDown.bind(this.controls);
-    const handleKeyUpBound = this.controls.handleKeyUp.bind(this.controls);
+    if (typeof window !== 'undefined') {
+      const handleKeyDownBound = this.controls.handleKeyDown.bind(
+        this.controls
+      );
+      const handleKeyUpBound = this.controls.handleKeyUp.bind(this.controls);
 
-    window.addEventListener('keydown', handleKeyDownBound);
-    window.addEventListener('keyup', handleKeyUpBound);
+      window.addEventListener('keydown', handleKeyDownBound);
+      window.addEventListener('keyup', handleKeyUpBound);
 
-    return () => {
-      window.removeEventListener('keydown', handleKeyDownBound);
-      window.removeEventListener('keyup', handleKeyUpBound);
-    };
+      return () => {
+        window.removeEventListener('keydown', handleKeyDownBound);
+        window.removeEventListener('keyup', handleKeyUpBound);
+      };
+    }
   }
 
   draw(context: CanvasRenderingContext2D) {
