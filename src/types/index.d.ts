@@ -47,6 +47,16 @@ export interface CarControlsInterface {
   handleKeyUp(event: KeyboardEvent): void;
 }
 
+export interface RaySensorInterface {
+  car: Car;
+  rayCount: number;
+  rayLength: number;
+  rayAngleSpread: number;
+
+  rays: list;
+  readings: list;
+}
+
 export type DragForceParams = {
   speed: number; //m/s
   drag_coefficient: number;
