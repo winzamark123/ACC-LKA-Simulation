@@ -10,12 +10,10 @@ interface IndexCanvasProps {
 
 export default function IndexCanvas({ width, height }: IndexCanvasProps) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
-
-  const mainCar = new Car(500, 500, 100, 100);
-  const carRef = useRef(mainCar);
-
   const road = new Road(500, 1000);
   const roadRef = useRef(road);
+  const mainCar = new Car(road.getLaneCenter(0), 500, 100, 100);
+  const carRef = useRef(mainCar);
 
   mainCar.setupControls();
   const carControls = useRef(new CarControls());
@@ -53,10 +51,23 @@ export default function IndexCanvas({ width, height }: IndexCanvasProps) {
     }
     const draw = () => {
       context.clearRect(0, 0, canvas.width, canvas.height);
+      context.save();
+
+      context.translate(-carRef.current.x, -carRef.current.y);
+
       roadRef.current.draw(context);
+
+      // Restore the context state
+      context.restore();
       carRef.current.update(); // Update car state
+
+      // Draw the car at the center of the canvas
+      context.save();
+      context.translate(canvas.width / 2, canvas.height / 2);
       carRef.current.draw(context);
-      requestAnimationFrame(draw); // Continuously redraw the canvas
+      context.restore();
+
+      requestAnimationFrame(draw);
     };
 
     draw();

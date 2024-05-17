@@ -48,7 +48,7 @@ export default class Car implements CarInterface {
     this.width = width;
     this.height = height;
 
-    this.maxSpeed = 5;
+    this.maxSpeed = 3;
     this.mass = 1500;
     this.frontal_area = 5;
 
@@ -114,10 +114,10 @@ export default class Car implements CarInterface {
   */
 
   turnLeft() {
-    this.angle -= this.TURNING_RATE;
+    this.angle -= this.TURNING_RATE * (this.speed / this.maxSpeed);
   }
   turnRight() {
-    this.angle += this.TURNING_RATE;
+    this.angle += this.TURNING_RATE * (this.speed / this.maxSpeed);
   }
   accelerate() {
     this.acceleration += this.ACCELERATION_RATE;
