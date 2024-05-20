@@ -6,11 +6,15 @@ export function calcDragAcceleration({
   area,
   air_density,
   mass,
-}: DragForceParams) {
+}: DragForceParams): number {
   return (0.5 * drag_coefficient * area * air_density * speed * speed) / mass;
 }
 
-export function linear_extrapolation(start: number, end: number, t: number) {
+export function linear_extrapolation(
+  start: number,
+  end: number,
+  t: number
+): number {
   return (1 - t) * start + t * end;
 }
 
