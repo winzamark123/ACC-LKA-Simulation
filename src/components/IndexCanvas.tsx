@@ -2,6 +2,7 @@ import { useRef, useEffect } from 'react';
 import Car from './Car/Car';
 import Road from './Road/Road';
 import CarControls from './Car/CarControls';
+import RaySensor from './RaySensor/RaySensor';
 
 interface IndexCanvasProps {
   width: number;
@@ -11,9 +12,11 @@ interface IndexCanvasProps {
 export default function IndexCanvas({ width, height }: IndexCanvasProps) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const road = new Road(500, 1000);
-  const roadRef = useRef(road);
   const mainCar = new Car(road.getLaneCenter(0), 500, 100, 100);
+  const rays = new RaySensor(mainCar);
+  const roadRef = useRef(road);
   const carRef = useRef(mainCar);
+  const raysRef = useRef(rays);
 
   mainCar.setupControls();
   const carControls = useRef(new CarControls());
@@ -54,17 +57,18 @@ export default function IndexCanvas({ width, height }: IndexCanvasProps) {
       context.save();
 
       context.translate(-carRef.current.x, -carRef.current.y);
-
       roadRef.current.draw(context);
 
       // Restore the context state
       context.restore();
       carRef.current.update(); // Update car state
+      raysRef.current.castRays(); // Cast rays from the car
 
       // Draw the car at the center of the canvas
       context.save();
       context.translate(canvas.width / 2, canvas.height / 2);
       carRef.current.draw(context);
+      raysRef.current.draw(context);
       context.restore();
 
       requestAnimationFrame(draw);
