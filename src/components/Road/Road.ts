@@ -33,6 +33,7 @@ export default class Road implements RoadInterface {
       [topRight, bottomRight],
     ];
   }
+
   getLaneCenter(laneIndex: number): number {
     const lane_width = this.width / this.lane_count;
     return (
@@ -41,6 +42,8 @@ export default class Road implements RoadInterface {
       Math.min(laneIndex, this.lane_count) * lane_width
     );
   }
+
+  updateWithCarPos() {}
 
   draw(ctx: CanvasRenderingContext2D): void {
     ctx.lineWidth = 5;
