@@ -57,7 +57,7 @@ export default function IndexCanvas({ width, height }: IndexCanvasProps) {
       context.clearRect(0, 0, canvas.width, canvas.height);
       context.save();
 
-      // context.translate(-carRef.current.x, -carRef.current.y);
+      context.translate(0, -carRef.current.y);
       roadRef.current.draw(context);
 
       // Restore the context state
