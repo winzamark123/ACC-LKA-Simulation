@@ -42,11 +42,11 @@ export default class Car implements CarInterface {
   // Car Controls
   controls: CarControlsInterface;
 
-  constructor(x: number, y: number, width: number, height: number) {
+  constructor(x: number, y?: number, width?: number, height?: number) {
     this.x = x;
-    this.y = y;
-    this.width = width;
-    this.height = height;
+    this.y = y || this.randomPosition();
+    this.width = width || 100;
+    this.height = height || this.randomSize();
 
     this.maxSpeed = 5;
     this.mass = 1500;
@@ -59,6 +59,14 @@ export default class Car implements CarInterface {
     this.drag_acceleration = 0;
 
     this.controls = new CarControls();
+  }
+
+  private randomPosition(): number {
+    return Math.random() * 1000;
+  }
+
+  private randomSize() {
+    return 50 + Math.random() * 150;
   }
 
   setupControls() {

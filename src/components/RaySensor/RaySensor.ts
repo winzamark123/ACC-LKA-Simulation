@@ -1,4 +1,4 @@
-import { linear_extrapolation } from '@/lib/useEquations';
+import { getIntersection, linear_extrapolation } from '@/lib/useEquations';
 import { Line, Point, RaySensorInterface, CarInterface } from '@/types';
 import Car from '@/components/Car/Car';
 
@@ -48,8 +48,18 @@ export default class RaySensor implements RaySensorInterface {
   }
 
   getReadings(ray: Line, traffic: Car[], borders: Line[]) {
-    const left_border = borders[0];
-    const right_border = borders[1];
+    const readings = [];
+    for (const border of borders) {
+      const intersection = getIntersection(ray, border);
+      if (intersection) {
+        readings.push(
+          Math.sqrt(
+            (intersection.x - ray[0].x) ** 2 + (intersection.y - ray[0].y) ** 2
+          )
+        );
+      }
+    }
+    return readings;
   }
 
   draw(context: CanvasRenderingContext2D) {

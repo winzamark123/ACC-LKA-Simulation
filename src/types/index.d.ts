@@ -15,7 +15,10 @@ export type Point = {
   y: number;
 };
 
-export type Line = [Point, Point];
+export type Line = {
+  start: Point;
+  end: Point;
+};
 
 export interface CarInterface {
   x: number;
