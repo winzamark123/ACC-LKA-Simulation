@@ -12,7 +12,7 @@ interface IndexCanvasProps {
 export default function IndexCanvas({ width, height }: IndexCanvasProps) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const road = new Road(300, 500);
-  const mainCar = new Car(road.getLaneCenter(1), -1500, 50, 100);
+  const mainCar = new Car(road.getLaneCenter(1), height - 100, 50, 100);
   const rays = new RaySensor(mainCar);
 
   const roadRef = useRef(road);
@@ -57,7 +57,7 @@ export default function IndexCanvas({ width, height }: IndexCanvasProps) {
       context.clearRect(0, 0, canvas.width, canvas.height);
       context.save();
 
-      context.translate(0, -carRef.current.y);
+      context.translate(0, height - 200 - carRef.current.y);
       roadRef.current.draw(context);
       carRef.current.update(); // Update car state
       raysRef.current.castRays(); // Cast rays from the car
