@@ -1,5 +1,6 @@
 import { RoadInterface, Point } from '@/types';
 import { linear_extrapolation } from '@/lib/useEquations';
+import { Line } from '@/types';
 
 export default class Road implements RoadInterface {
   x: number;
@@ -10,7 +11,7 @@ export default class Road implements RoadInterface {
   width: number;
   lane_count: number;
 
-  borders: [Point, Point][];
+  borders: Line[];
 
   constructor(x: number, width: number, lane_count: number = 3) {
     this.x = x;
@@ -42,8 +43,6 @@ export default class Road implements RoadInterface {
       Math.min(laneIndex, this.lane_count) * lane_width
     );
   }
-
-  updateWithCarPos() {}
 
   draw(ctx: CanvasRenderingContext2D): void {
     ctx.lineWidth = 5;
