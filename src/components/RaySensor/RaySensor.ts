@@ -54,7 +54,8 @@ export default class RaySensor implements RaySensorInterface {
       if (intersection) {
         readings.push(
           Math.sqrt(
-            (intersection.x - ray[0].x) ** 2 + (intersection.y - ray[0].y) ** 2
+            (intersection.x - ray.start.x) ** 2 +
+              (intersection.y - ray.start.y) ** 2
           )
         );
       }
