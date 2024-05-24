@@ -37,8 +37,6 @@ export default class Road implements RoadInterface {
 
   getLaneCenter(laneIndex: number): number {
     const lane_width = this.width / this.lane_count;
-    console.log('WIDTH:', this.width);
-    console.log('Lane_width:', lane_width);
     return lane_width / 2 + Math.min(laneIndex, this.lane_count) * lane_width;
   }
 

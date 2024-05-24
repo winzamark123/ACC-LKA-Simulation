@@ -1,4 +1,4 @@
-import { CarInterface, CarControlsInterface } from '@/types';
+import { CarInterface, CarControlsInterface, CarStatsInterface } from '@/types';
 import CarControls from '@/components/Car/CarControls';
 import { calcDragAcceleration } from '@/lib/useEquations';
 import {
@@ -113,6 +113,16 @@ export default class Car implements CarInterface {
       'y:',
       this.y
     );
+  }
+
+  getStats(): CarStatsInterface {
+    return {
+      speed: this.speed,
+      acceleration: this.acceleration,
+      angle: this.angle,
+      x: this.x,
+      y: this.y,
+    };
   }
 
   /*

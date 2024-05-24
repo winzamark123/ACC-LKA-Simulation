@@ -47,17 +47,25 @@ export default class RaySensor implements RaySensorInterface {
     }
   }
 
+  updateRays() {
+    this.castRays();
+    for (const [start, end] of this.rays) {
+      const ray = { start, end };
+      const readings = this.getReadings(ray, [], []);
+      this.readings.push(Math.min(...readings));
+    }
+  }
+
   getReadings(ray: Line, traffic: Car[], borders: Line[]) {
     const readings = [];
     for (const border of borders) {
       const intersection = getIntersection(ray, border);
       if (intersection) {
-        readings.push(
-          Math.sqrt(
-            (intersection.x - ray.start.x) ** 2 +
-              (intersection.y - ray.start.y) ** 2
-          )
+        const distance = Math.sqrt(
+          (intersection.x - ray.start.x) ** 2 +
+            (intersection.y - ray.start.y) ** 2
         );
+        readings.push(distance);
       }
     }
     return readings;
