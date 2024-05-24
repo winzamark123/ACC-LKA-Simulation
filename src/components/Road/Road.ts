@@ -37,9 +37,11 @@ export default class Road implements RoadInterface {
 
   getLaneCenter(laneIndex: number): number {
     const lane_width = this.width / this.lane_count;
-    console.log('WIDTH:', this.width);
-    console.log('Lane_width:', lane_width);
     return lane_width / 2 + Math.min(laneIndex, this.lane_count) * lane_width;
+  }
+
+  getRandomLaneCenter(): number {
+    return this.getLaneCenter(Math.floor(Math.random() * this.lane_count));
   }
 
   draw(ctx: CanvasRenderingContext2D): void {

@@ -23,6 +23,7 @@ export function getIntersection(line_a: Line, line_b: Line) {
     B = line_a.end,
     C = line_b.start,
     D = line_b.end;
+
   const tTop = (D.x - C.x) * (A.y - C.y) - (D.y - C.y) * (A.x - C.x);
   const uTop = (C.y - A.y) * (A.x - B.x) - (C.x - A.x) * (A.y - B.y);
   const bottom = (D.y - C.y) * (B.x - A.x) - (D.x - C.x) * (B.y - A.y);

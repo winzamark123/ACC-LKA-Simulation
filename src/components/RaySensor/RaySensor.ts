@@ -13,12 +13,12 @@ export default class RaySensor implements RaySensorInterface {
 
   constructor(car: CarInterface) {
     this.car = car;
-    this.rayCount = 10;
+    this.rayCount = 5;
     this.rayLength = 200;
     this.rayAngleSpread = Math.PI / 3;
 
     this.rays = [];
-    this.readings = [];
+    this.readings = new Array(this.rayCount).fill(1);
   }
 
   castRays() {
@@ -47,17 +47,32 @@ export default class RaySensor implements RaySensorInterface {
     }
   }
 
+  updateRays(borders: Line[], traffic: Car[]) {
+    this.castRays();
+    this.readings.fill(1); // Reset readings to 1
+    for (let i = 0; i < this.rays.length; i++) {
+      const [start, end] = this.rays[i];
+      const ray: Line = { start, end };
+      const distances = this.getReadings(ray, traffic, borders);
+
+      if (distances.length > 0) {
+        const minDistance = Math.min(...distances);
+        this.readings[i] = minDistance / this.rayLength; // Calculate percentage distance
+      }
+      console.log(this.readings);
+    }
+  }
+
   getReadings(ray: Line, traffic: Car[], borders: Line[]) {
     const readings = [];
     for (const border of borders) {
       const intersection = getIntersection(ray, border);
       if (intersection) {
-        readings.push(
-          Math.sqrt(
-            (intersection.x - ray.start.x) ** 2 +
-              (intersection.y - ray.start.y) ** 2
-          )
+        const distance = Math.sqrt(
+          (intersection.x - ray.start.x) ** 2 +
+            (intersection.y - ray.start.y) ** 2
         );
+        readings.push(distance);
       }
     }
     return readings;

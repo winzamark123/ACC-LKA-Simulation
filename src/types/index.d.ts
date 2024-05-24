@@ -1,3 +1,11 @@
+export interface CarStatsInterface {
+  speed: number;
+  acceleration: number;
+  angle: number;
+  x: number;
+  y: number;
+}
+
 export interface RoadInterface {
   x: number;
 
