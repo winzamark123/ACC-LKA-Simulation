@@ -1,5 +1,6 @@
 import { RoadInterface, Point } from '@/types';
 import { linear_extrapolation } from '@/lib/useEquations';
+import { Line } from '@/types';
 
 export default class Road implements RoadInterface {
   x: number;
@@ -10,7 +11,7 @@ export default class Road implements RoadInterface {
   width: number;
   lane_count: number;
 
-  borders: [Point, Point][];
+  borders: Line[];
 
   constructor(x: number, width: number, lane_count: number = 3) {
     this.x = x;
@@ -29,17 +30,16 @@ export default class Road implements RoadInterface {
     const bottomRight: Point = { x: this.right, y: this.bottom };
 
     this.borders = [
-      [topLeft, bottomLeft],
-      [topRight, bottomRight],
+      { start: topLeft, end: bottomLeft },
+      { start: topRight, end: bottomRight },
     ];
   }
+
   getLaneCenter(laneIndex: number): number {
     const lane_width = this.width / this.lane_count;
-    return (
-      this.left +
-      lane_width / 2 +
-      Math.min(laneIndex, this.lane_count) * lane_width
-    );
+    console.log('WIDTH:', this.width);
+    console.log('Lane_width:', lane_width);
+    return lane_width / 2 + Math.min(laneIndex, this.lane_count) * lane_width;
   }
 
   draw(ctx: CanvasRenderingContext2D): void {
@@ -64,8 +64,8 @@ export default class Road implements RoadInterface {
     ctx.setLineDash([]);
     this.borders.forEach((border) => {
       ctx.beginPath();
-      ctx.moveTo(border[0].x, border[0].y);
-      ctx.lineTo(border[1].x, border[1].y);
+      ctx.moveTo(border.start.x, border.start.y);
+      ctx.lineTo(border.end.x, border.end.y);
       ctx.stroke();
     });
   }

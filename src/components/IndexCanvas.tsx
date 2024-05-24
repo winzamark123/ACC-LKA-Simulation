@@ -11,15 +11,16 @@ interface IndexCanvasProps {
 
 export default function IndexCanvas({ width, height }: IndexCanvasProps) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
-  const road = new Road(500, 1000);
-  const mainCar = new Car(road.getLaneCenter(0), 500, 100, 100);
+  const road = new Road(300, 500);
+  const mainCar = new Car(road.getLaneCenter(1), height - 100, 50, 100);
   const rays = new RaySensor(mainCar);
+
   const roadRef = useRef(road);
   const carRef = useRef(mainCar);
   const raysRef = useRef(rays);
+  const carControls = useRef(new CarControls());
 
   mainCar.setupControls();
-  const carControls = useRef(new CarControls());
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) =>
@@ -56,17 +57,10 @@ export default function IndexCanvas({ width, height }: IndexCanvasProps) {
       context.clearRect(0, 0, canvas.width, canvas.height);
       context.save();
 
-      context.translate(-carRef.current.x, -carRef.current.y);
+      context.translate(0, height - 200 - carRef.current.y);
       roadRef.current.draw(context);
-
-      // Restore the context state
-      context.restore();
       carRef.current.update(); // Update car state
       raysRef.current.castRays(); // Cast rays from the car
-
-      // Draw the car at the center of the canvas
-      context.save();
-      context.translate(canvas.width / 2, canvas.height / 2);
       carRef.current.draw(context);
       raysRef.current.draw(context);
       context.restore();

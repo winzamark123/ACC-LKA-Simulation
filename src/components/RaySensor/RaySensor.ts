@@ -1,5 +1,6 @@
-import { linear_extrapolation } from '@/lib/useEquations';
-import { Point, RaySensorInterface, CarInterface } from '@/types';
+import { getIntersection, linear_extrapolation } from '@/lib/useEquations';
+import { Line, Point, RaySensorInterface, CarInterface } from '@/types';
+import Car from '@/components/Car/Car';
 
 export default class RaySensor implements RaySensorInterface {
   car: CarInterface;
@@ -44,6 +45,22 @@ export default class RaySensor implements RaySensorInterface {
       // Store the rays
       this.rays.push([start, end]);
     }
+  }
+
+  getReadings(ray: Line, traffic: Car[], borders: Line[]) {
+    const readings = [];
+    for (const border of borders) {
+      const intersection = getIntersection(ray, border);
+      if (intersection) {
+        readings.push(
+          Math.sqrt(
+            (intersection.x - ray.start.x) ** 2 +
+              (intersection.y - ray.start.y) ** 2
+          )
+        );
+      }
+    }
+    return readings;
   }
 
   draw(context: CanvasRenderingContext2D) {
