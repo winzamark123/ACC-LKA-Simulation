@@ -17,6 +17,14 @@ import {
   - acceleration_rate: 0.3 (m/s^2)
 */
 
+interface CarOptions {
+  x?: number;
+  y?: number;
+  width?: number;
+  height?: number;
+  isTraffic?: boolean;
+}
+
 export default class Car implements CarInterface {
   // Car Size
   x: number;
@@ -42,8 +50,12 @@ export default class Car implements CarInterface {
   // Car Controls
   controls: CarControlsInterface;
 
-  constructor(x: number, y?: number, width?: number, height?: number) {
-    this.x = x;
+  isTraffic: boolean;
+  traffic_constant_speed: number;
+
+  constructor({ x, y, width, height, isTraffic }: CarOptions = {}) {
+    this.isTraffic = isTraffic || false;
+    this.x = x || 0;
     this.y = y || this.randomPosition();
     this.width = width || 100;
     this.height = height || this.randomSize();
@@ -57,6 +69,7 @@ export default class Car implements CarInterface {
     this.angle = 0;
 
     this.drag_acceleration = 0;
+    this.traffic_constant_speed = this.randomSpeed();
 
     this.controls = new CarControls();
   }
@@ -64,12 +77,18 @@ export default class Car implements CarInterface {
   private randomPosition(): number {
     const min_y = 400;
     const max_y = -10000;
+
     return Math.random() * (max_y - min_y) - min_y;
   }
 
   private randomSize() {
     const min_height = 100;
     return Math.max(min_height, 50 + Math.random() * 150);
+  }
+
+  private randomSpeed() {
+    const min_speed = 0.5;
+    return Math.max(min_speed, 0.5 + Math.random() * this.maxSpeed - 0.5);
   }
 
   setupControls() {
@@ -186,6 +205,10 @@ export default class Car implements CarInterface {
       if (this.controls.right) {
         this.turnRight();
       }
+    }
+
+    if (this.isTraffic) {
+      this.speed = this.traffic_constant_speed;
     }
 
     // Update Position of the Car
