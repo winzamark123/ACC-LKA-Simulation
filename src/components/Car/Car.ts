@@ -101,18 +101,6 @@ export default class Car implements CarInterface {
 
   update() {
     this.move();
-    console.log(
-      'speed:',
-      this.speed,
-      'accelerate:',
-      this.acceleration,
-      'angle:',
-      this.angle,
-      'x:',
-      this.x,
-      'y:',
-      this.y
-    );
   }
 
   getStats(): CarStatsInterface {

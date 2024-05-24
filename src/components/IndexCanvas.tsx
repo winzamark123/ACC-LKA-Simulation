@@ -64,7 +64,7 @@ export default function IndexCanvas({ width, height }: IndexCanvasProps) {
       roadRef.current.draw(context);
       carRef.current.update(); // Update car state
       // raysRef.current.castRays(); // Cast rays from the car
-      raysRef.current.updateRays(); // Update the rays
+      raysRef.current.updateRays(roadRef.current.borders, []); // Update the rays
       carRef.current.draw(context);
       raysRef.current.draw(context);
       context.restore();
