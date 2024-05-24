@@ -31,7 +31,7 @@ export default function DisplayStats({ carRef }: DisplayStatsProps) {
             <li>Acceleration: {carStats?.acceleration}</li>
             <li>Angle: {carStats?.angle}</li>
             <li>x: {carStats?.x}</li>
-            <li>y: -{carStats?.y}</li>
+            <li>y: {carStats?.y}</li>
           </ul>
         </div>
       </div>

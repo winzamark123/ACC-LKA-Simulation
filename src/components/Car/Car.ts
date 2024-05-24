@@ -46,7 +46,7 @@ export default class Car implements CarInterface {
     this.x = x;
     this.y = y || this.randomPosition();
     this.width = width || 100;
-    this.height = height || Math.max(100, this.randomSize());
+    this.height = height || this.randomSize();
 
     this.maxSpeed = 3;
     this.mass = 1500;
@@ -62,11 +62,14 @@ export default class Car implements CarInterface {
   }
 
   private randomPosition(): number {
-    return Math.random() * 1000;
+    const min_y = 400;
+    const max_y = -10000;
+    return Math.random() * (max_y - min_y) - min_y;
   }
 
   private randomSize() {
-    return 50 + Math.random() * 150;
+    const min_height = 100;
+    return Math.max(min_height, 50 + Math.random() * 150);
   }
 
   setupControls() {
