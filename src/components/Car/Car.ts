@@ -46,7 +46,7 @@ export default class Car implements CarInterface {
     this.x = x;
     this.y = y || this.randomPosition();
     this.width = width || 100;
-    this.height = height || this.randomSize();
+    this.height = height || Math.max(100, this.randomSize());
 
     this.maxSpeed = 3;
     this.mass = 1500;

@@ -40,6 +40,10 @@ export default class Road implements RoadInterface {
     return lane_width / 2 + Math.min(laneIndex, this.lane_count) * lane_width;
   }
 
+  getRandomLaneCenter(): number {
+    return this.getLaneCenter(Math.floor(Math.random() * this.lane_count));
+  }
+
   draw(ctx: CanvasRenderingContext2D): void {
     ctx.lineWidth = 5;
     ctx.strokeStyle = 'white';

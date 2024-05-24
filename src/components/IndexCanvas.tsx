@@ -21,6 +21,15 @@ export default function IndexCanvas({ width, height }: IndexCanvasProps) {
   const raysRef = useRef(rays);
   const carControls = useRef(new CarControls());
 
+  const traffic = [
+    new Car(road.getRandomLaneCenter()),
+    new Car(road.getRandomLaneCenter()),
+    new Car(road.getRandomLaneCenter()),
+    new Car(road.getRandomLaneCenter()),
+    new Car(road.getRandomLaneCenter()),
+    new Car(road.getRandomLaneCenter()),
+  ];
+
   // main car has controls
   mainCar.setupControls();
 
@@ -67,6 +76,11 @@ export default function IndexCanvas({ width, height }: IndexCanvasProps) {
       raysRef.current.updateRays(roadRef.current.borders, []); // Update the rays
       carRef.current.draw(context);
       raysRef.current.draw(context);
+
+      for (const car of traffic) {
+        car.update();
+        car.draw(context);
+      }
       context.restore();
 
       requestAnimationFrame(draw);
