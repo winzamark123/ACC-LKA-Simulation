@@ -55,8 +55,8 @@ export default class RaySensor implements RaySensorInterface {
       const distances = this.getReadings(ray, traffic, borders);
 
       if (distances.length > 0) {
-        const minDistance = Math.min(...distances);
-        this.readings[i] = minDistance / this.rayLength; // Calculate percentage distance
+        const min_distance = Math.min(...distances);
+        this.readings[i] = min_distance / this.rayLength; // Calculate percentage distance
       }
     }
   }

@@ -17,6 +17,13 @@
     "sourceType": "module"
   },
   "rules": {
+    "@typescript-eslint/naming-convention": [
+      "error",
+      {
+        "selector": "variable",
+        "format": ["snake_case", "UPPER_CASE"]
+      }
+    ],
     "prettier/prettier": [
         "error",
         {

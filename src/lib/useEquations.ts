@@ -19,23 +19,23 @@ export function linear_extrapolation(
 }
 
 export function getIntersection(line_a: Line, line_b: Line) {
-  const A = line_a.start,
-    B = line_a.end,
-    C = line_b.start,
-    D = line_b.end;
+  const a = line_a.start,
+    b = line_a.end,
+    c = line_b.start,
+    d = line_b.end;
 
-  const tTop = (D.x - C.x) * (A.y - C.y) - (D.y - C.y) * (A.x - C.x);
-  const uTop = (C.y - A.y) * (A.x - B.x) - (C.x - A.x) * (A.y - B.y);
-  const bottom = (D.y - C.y) * (B.x - A.x) - (D.x - C.x) * (B.y - A.y);
+  const t_top = (d.x - c.x) * (a.y - c.y) - (d.y - c.y) * (a.x - c.x);
+  const u_top = (c.y - a.y) * (a.x - b.x) - (c.x - a.x) * (a.y - b.y);
+  const bottom = (d.y - c.y) * (b.x - a.x) - (d.x - c.x) * (b.y - a.y);
 
   if (bottom != 0) {
-    const t = tTop / bottom;
-    const u = uTop / bottom;
+    const t = t_top / bottom;
+    const u = u_top / bottom;
 
     if (t >= 0 && t <= 1 && u >= 0 && u <= 1) {
       return {
-        x: linear_extrapolation(A.x, B.x, t),
-        y: linear_extrapolation(A.y, B.y, t),
+        x: linear_extrapolation(a.x, b.x, t),
+        y: linear_extrapolation(a.y, b.y, t),
         offset: t,
       };
     }

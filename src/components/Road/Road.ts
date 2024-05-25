@@ -24,14 +24,14 @@ export default class Road implements RoadInterface {
     this.left = this.x - width / 2;
     this.right = this.x + width / 2;
 
-    const topLeft: Point = { x: this.left, y: this.top };
-    const topRight: Point = { x: this.right, y: this.top };
-    const bottomLeft: Point = { x: this.left, y: this.bottom };
-    const bottomRight: Point = { x: this.right, y: this.bottom };
+    const top_left: Point = { x: this.left, y: this.top };
+    const top_right: Point = { x: this.right, y: this.top };
+    const bottom_left: Point = { x: this.left, y: this.bottom };
+    const bottom_right: Point = { x: this.right, y: this.bottom };
 
     this.borders = [
-      { start: topLeft, end: bottomLeft },
-      { start: topRight, end: bottomRight },
+      { start: top_left, end: bottom_left },
+      { start: top_right, end: bottom_right },
     ];
   }
 

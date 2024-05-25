@@ -11,20 +11,20 @@ interface IndexCanvasProps {
 }
 
 export default function IndexCanvas({ width, height }: IndexCanvasProps) {
-  const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  const canvas_ref = useRef<HTMLCanvasElement | null>(null);
   const road = new Road(300, 500);
-  const mainCar = new Car({
+  const main_car = new Car({
     x: road.getLaneCenter(1),
     y: height - 100,
     width: 50,
     height: 100,
   });
-  const rays = new RaySensor(mainCar);
+  const rays = new RaySensor(main_car);
 
-  const roadRef = useRef(road);
-  const carRef = useRef(mainCar);
-  const raysRef = useRef(rays);
-  const carControls = useRef(new CarControls());
+  const road_ref = useRef(road);
+  const main_car_ref = useRef(main_car);
+  const rays_ref = useRef(rays);
+  const car_controls = useRef(new CarControls());
 
   const traffic = [
     new Car({ x: road.getRandomLaneCenter(), isTraffic: true }),
@@ -39,29 +39,29 @@ export default function IndexCanvas({ width, height }: IndexCanvasProps) {
   ];
 
   // main car has controls
-  mainCar.setupControls();
+  main_car.setupControls();
 
   useEffect(() => {
-    const handleKeyDown = (event: KeyboardEvent) =>
-      carControls.current.handleKeyDown(event);
-    const handleKeyUp = (event: KeyboardEvent) =>
-      carControls.current.handleKeyUp(event);
+    const handle_key_down = (event: KeyboardEvent) =>
+      car_controls.current.handleKeyDown(event);
+    const handle_key_up = (event: KeyboardEvent) =>
+      car_controls.current.handleKeyUp(event);
 
     if (typeof window !== 'undefined') {
-      window.addEventListener('keydown', handleKeyDown);
-      window.addEventListener('keyup', handleKeyUp);
+      window.addEventListener('keydown', handle_key_down);
+      window.addEventListener('keyup', handle_key_up);
     }
 
     return () => {
       if (typeof window !== 'undefined') {
-        window.removeEventListener('keydown', handleKeyDown);
-        window.removeEventListener('keyup', handleKeyUp);
+        window.removeEventListener('keydown', handle_key_down);
+        window.removeEventListener('keyup', handle_key_up);
       }
     };
   }, []);
 
   useEffect(() => {
-    const canvas = canvasRef.current;
+    const canvas = canvas_ref.current;
 
     if (canvas === null) {
       return;
@@ -77,17 +77,19 @@ export default function IndexCanvas({ width, height }: IndexCanvasProps) {
       context.clearRect(0, 0, canvas.width, canvas.height);
       context.save();
 
-      context.translate(0, height - 200 - carRef.current.y);
-      roadRef.current.draw(context);
-      carRef.current.update(); // Update car state
-      raysRef.current.updateRays(roadRef.current.borders, []); // Update the rays
-      carRef.current.draw(context);
-      raysRef.current.draw(context);
+      context.translate(0, height - 200 - main_car_ref.current.y);
+      road_ref.current.draw(context);
+      main_car_ref.current.update(); // Update car state
 
       for (const car of traffic) {
         car.update();
         car.draw(context);
       }
+
+      rays_ref.current.updateRays(road_ref.current.borders, []); // Update the rays
+      main_car_ref.current.draw(context);
+      rays_ref.current.draw(context);
+
       context.restore();
 
       requestAnimationFrame(draw);
@@ -99,13 +101,13 @@ export default function IndexCanvas({ width, height }: IndexCanvasProps) {
   return (
     <main className="flex border border-black">
       <canvas
-        ref={canvasRef}
+        ref={canvas_ref}
         className="border border-blue-400"
         width={width}
         height={height}
       ></canvas>
       <div className="border border-red-300">
-        <DisplayStats carRef={carRef} />
+        <DisplayStats carRef={main_car_ref} />
       </div>
     </main>
   );
