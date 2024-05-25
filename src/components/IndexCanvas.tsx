@@ -74,19 +74,23 @@ export default function IndexCanvas({ width, height }: IndexCanvasProps) {
     }
 
     const draw = () => {
+      // UPDATING STATES
       context.clearRect(0, 0, canvas.width, canvas.height);
       context.save();
-
       context.translate(0, height - 200 - main_car_ref.current.y);
-      road_ref.current.draw(context);
       main_car_ref.current.update(); // Update car state
 
       for (const car of traffic) {
         car.update();
-        car.draw(context);
       }
 
-      rays_ref.current.updateRays(road_ref.current.borders, []); // Update the rays
+      rays_ref.current.updateRays(road_ref.current.borders, traffic); // Update the rays
+
+      // DRAWING CODE
+      for (const car of traffic) {
+        car.draw(context);
+      }
+      road_ref.current.draw(context);
       main_car_ref.current.draw(context);
       rays_ref.current.draw(context);
 

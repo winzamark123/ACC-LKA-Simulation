@@ -63,6 +63,8 @@ export default class RaySensor implements RaySensorInterface {
 
   getReadings(ray: Line, traffic: Car[], borders: Line[]) {
     const readings = [];
+
+    // Check for intersections with borders
     for (const border of borders) {
       const intersection = getIntersection(ray, border);
       if (intersection) {
@@ -73,6 +75,35 @@ export default class RaySensor implements RaySensorInterface {
         readings.push(distance);
       }
     }
+
+    // Check for intersections with traffic
+    /*
+    for (const car of traffic) {
+      const front_intersection = getIntersection(ray, car.borders[0]);
+      const right_intersection = getIntersection(ray, car.borders[1]);
+      const right_side_intersection = getIntersection(ray, car.borders[2]);
+      const left_intersection = getIntersection(ray, car.borders[3]);
+      const left_side_intersection = getIntersection(ray, car.borders[4]);
+
+      const intersections = [
+        front_intersection,
+        right_intersection,
+        right_side_intersection,
+        left_intersection,
+        left_side_intersection,
+      ];
+
+      for (const intersection of intersections) {
+        if (intersection) {
+          const distance = Math.sqrt(
+            (intersection.x - ray.start.x) ** 2 +
+              (intersection.y - ray.start.y) ** 2
+          );
+          readings.push(distance);
+        }
+      }
+    }
+    */
     return readings;
   }
 
