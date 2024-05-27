@@ -19,6 +19,7 @@ export function linear_extrapolation(
 }
 
 export function getIntersection(line_a: Line, line_b: Line) {
+  if (!line_a || !line_b) return;
   const a = line_a.start,
     b = line_a.end,
     c = line_b.start,

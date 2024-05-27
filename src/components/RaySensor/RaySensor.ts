@@ -75,9 +75,7 @@ export default class RaySensor implements RaySensorInterface {
         readings.push(distance);
       }
     }
-
     // Check for intersections with traffic
-    /*
     for (const car of traffic) {
       const front_intersection = getIntersection(ray, car.borders[0]);
       const right_intersection = getIntersection(ray, car.borders[1]);
@@ -103,7 +101,6 @@ export default class RaySensor implements RaySensorInterface {
         }
       }
     }
-    */
     return readings;
   }
 
