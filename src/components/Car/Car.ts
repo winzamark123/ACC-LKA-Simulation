@@ -1,4 +1,9 @@
-import { CarInterface, CarControlsInterface, CarStatsInterface } from '@/types';
+import {
+  CarInterface,
+  CarControlsInterface,
+  CarStatsInterface,
+  Line,
+} from '@/types';
 import CarControls from '@/components/Car/CarControls';
 import { calcDragAcceleration } from '@/lib/useEquations';
 import {
@@ -53,6 +58,8 @@ export default class Car implements CarInterface {
   isTraffic: boolean;
   traffic_constant_speed: number;
 
+  borders: Line[];
+
   constructor({ x, y, width, height, isTraffic }: CarOptions = {}) {
     this.isTraffic = isTraffic || false;
     this.x = x || 0;
@@ -72,6 +79,7 @@ export default class Car implements CarInterface {
     this.traffic_constant_speed = this.randomSpeed();
 
     this.controls = new CarControls();
+    this.borders = this.getBorders();
   }
 
   private randomPosition(): number {
@@ -93,19 +101,44 @@ export default class Car implements CarInterface {
 
   setupControls() {
     if (typeof window !== 'undefined') {
-      const handleKeyDownBound = this.controls.handleKeyDown.bind(
+      const handle_key_down_bound = this.controls.handleKeyDown.bind(
         this.controls
       );
-      const handleKeyUpBound = this.controls.handleKeyUp.bind(this.controls);
+      const handle_key_up_bound = this.controls.handleKeyUp.bind(this.controls);
 
-      window.addEventListener('keydown', handleKeyDownBound);
-      window.addEventListener('keyup', handleKeyUpBound);
+      window.addEventListener('keydown', handle_key_down_bound);
+      window.addEventListener('keyup', handle_key_up_bound);
 
       return () => {
-        window.removeEventListener('keydown', handleKeyDownBound);
-        window.removeEventListener('keyup', handleKeyUpBound);
+        window.removeEventListener('keydown', handle_key_down_bound);
+        window.removeEventListener('keyup', handle_key_up_bound);
       };
     }
+  }
+
+  getBorders(): Line[] {
+    return [
+      //FRONT SIDE
+      {
+        start: { x: this.x, y: this.y },
+        end: { x: this.x + this.width, y: this.y },
+      },
+      // RIGHT SIDE
+      {
+        start: { x: this.x + this.width, y: this.y },
+        end: { x: this.x + this.width, y: this.y + this.height },
+      },
+      // BACK SIDE
+      {
+        start: { x: this.x + this.width, y: this.y + this.height },
+        end: { x: this.x, y: this.y + this.height },
+      },
+      // LEFT SIDE
+      {
+        start: { x: this.x, y: this.y + this.height },
+        end: { x: this.x, y: this.y },
+      },
+    ];
   }
 
   draw(context: CanvasRenderingContext2D) {
@@ -123,6 +156,7 @@ export default class Car implements CarInterface {
 
   update() {
     this.move();
+    this.borders = this.getBorders();
   }
 
   getStats(): CarStatsInterface {

@@ -29,26 +29,34 @@ export type Line = {
 };
 
 export interface CarInterface {
+  // Car Size
   x: number;
   y: number;
   width: number;
   height: number;
 
+  // Car Attributes
   frontal_area: number;
   mass: number;
   maxSpeed: number;
-
-  speed: number;
-  acceleration: number;
-
   ACCELERATION_RATE: number;
   TURNING_RATE: number;
   BRAKING_RATE: number;
 
+  // Car Movement
+  speed: number;
+  acceleration: number;
+
   drag_acceleration: number;
   angle: number;
 
+  // Car Controls
   controls: CarControlsInterface;
+
+  isTraffic: boolean;
+  traffic_constant_speed: number;
+
+  borders: Line[];
 }
 
 export interface CarControlsInterface {
