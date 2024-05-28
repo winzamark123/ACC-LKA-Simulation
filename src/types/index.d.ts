@@ -51,7 +51,7 @@ export interface CarInterface {
   angle: number;
 
   // Car Controls
-  controls: CarControlsInterface;
+  controls: CarControlsInterface | I_ACC_Bot;
 
   isTraffic: boolean;
   traffic_constant_speed: number;
@@ -67,14 +67,6 @@ export interface CarControlsInterface {
   handleKeyDown(event: KeyboardEvent): void;
   handleKeyUp(event: KeyboardEvent): void;
 }
-export interface I_ACC_Bot {
-  forward: boolean;
-  stop: boolean;
-  left: boolean;
-  right: boolean;
-  determineAction(readings: number[], car: Car): Direction;
-}
-
 export interface RaySensorInterface {
   car: Car;
   rayCount: number;

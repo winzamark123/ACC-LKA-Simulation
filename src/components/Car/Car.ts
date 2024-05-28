@@ -13,6 +13,8 @@ import {
   DRAG_COEFFICIENT,
 } from '@/lib/physicsConstants';
 
+import ACC_Bot from '../Bot/ACC_Bot';
+
 /*
   Typical Car with the following parameters:
   - x, y: position of the car
@@ -22,7 +24,7 @@ import {
   - acceleration_rate: 0.3 (m/s^2)
 */
 
-interface CarOptions {
+interface CarProps {
   x?: number;
   y?: number;
   width?: number;
@@ -53,14 +55,14 @@ export default class Car implements CarInterface {
   angle: number;
 
   // Car Controls
-  controls: CarControlsInterface;
+  controls: CarControlsInterface | ACC_Bot;
 
   isTraffic: boolean;
   traffic_constant_speed: number;
 
   borders: Line[];
 
-  constructor({ x, y, width, height, isTraffic }: CarOptions = {}) {
+  constructor({ x, y, width, height, isTraffic }: CarProps = {}) {
     this.isTraffic = isTraffic || false;
     this.x = x || 0;
     this.y = y || this.randomPosition();
@@ -99,7 +101,13 @@ export default class Car implements CarInterface {
     return Math.max(min_speed, 0.5 + Math.random() * this.maxSpeed - 0.5);
   }
 
-  setupControls() {
+  setupControls({ isBot = false }: { isBot?: boolean }) {
+    // If the car is a bot, use the ACC_Bot controls
+    if (isBot) {
+      this.controls = new ACC_Bot();
+      return;
+    }
+    // If the car is not a bot, bind the keys to the CarControls
     if (typeof window !== 'undefined') {
       const handle_key_down_bound = this.controls.handleKeyDown.bind(
         this.controls
