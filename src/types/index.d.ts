@@ -61,11 +61,18 @@ export interface CarInterface {
 
 export interface CarControlsInterface {
   forward: boolean;
-  backward: boolean;
+  stop: boolean;
   left: boolean;
   right: boolean;
   handleKeyDown(event: KeyboardEvent): void;
   handleKeyUp(event: KeyboardEvent): void;
+}
+export interface I_ACC_Bot {
+  forward: boolean;
+  stop: boolean;
+  left: boolean;
+  right: boolean;
+  determineAction(readings: number[], car: Car): Direction;
 }
 
 export interface RaySensorInterface {

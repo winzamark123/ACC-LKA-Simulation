@@ -2,13 +2,13 @@ import { CarControlsInterface } from '@/types';
 
 export default class CarControls implements CarControlsInterface {
   forward: boolean;
-  backward: boolean;
+  stop: boolean;
   left: boolean;
   right: boolean;
 
   constructor() {
     this.forward = false;
-    this.backward = false;
+    this.stop = false;
     this.left = false;
     this.right = false;
   }
@@ -19,7 +19,7 @@ export default class CarControls implements CarControlsInterface {
         this.forward = true;
         break;
       case 'ArrowDown':
-        this.backward = true;
+        this.stop = true;
         break;
       case 'ArrowLeft':
         this.left = true;
@@ -36,7 +36,7 @@ export default class CarControls implements CarControlsInterface {
         this.forward = false;
         break;
       case 'ArrowDown':
-        this.backward = false;
+        this.stop = false;
         break;
       case 'ArrowLeft':
         this.left = false;

@@ -203,7 +203,7 @@ export default class Car implements CarInterface {
     }
 
     // Car Controls Backward
-    if (this.controls.backward) {
+    if (this.controls.stop) {
       this.speed -= this.BRAKING_RATE;
     }
 
