@@ -4,12 +4,14 @@ import Road from './Road/Road';
 import CarControls from './Car/CarControls';
 import RaySensor from './RaySensor/RaySensor';
 import DisplayStats from './Stats/DisplayStats';
+import { createTraffic } from './Traffic/Traffic';
 
 interface IndexCanvasProps {
   width: number;
   height: number;
 }
 
+// Initialize components (road, car, rays, car_controls)
 function initComponents(height: number) {
   const road = new Road(300, 500);
   const main_car = new Car({
@@ -49,19 +51,6 @@ function useKeybindings(car_controls_ref: React.MutableRefObject<CarControls>) {
       }
     };
   }, [car_controls_ref]);
-}
-
-// Create traffic cars
-function createTraffic(road: Road, traffic_count: number) {
-  const traffic: Car[] = [];
-  for (let i = 0; i < traffic_count; i++) {
-    const car = new Car({
-      x: road.getRandomLaneCenter(),
-      isTraffic: true,
-    });
-    traffic.push(car);
-  }
-  return traffic;
 }
 
 export default function IndexCanvas({ width, height }: IndexCanvasProps) {
