@@ -1,5 +1,3 @@
-import Car from '@/components/Car/Car';
-
 export default class ACC_Bot {
   forward: boolean;
   stop: boolean;
@@ -13,17 +11,15 @@ export default class ACC_Bot {
     this.right = false;
   }
 
-  update(readings: number[], car: Car) {
-    for (const reading in readings) {
-      console.log('ACC_Bot: update: reading: ', Number(reading));
-      const calc_y = Number(reading) * Math.sin(car.angle);
-      if (calc_y >= 0.7) {
-        console.log('ACC_Bot: update: reading: ', reading);
-        this.forward = false;
-        this.stop = true;
-      }
+  update(readings: number[]) {
+    const average = readings.reduce((a, b) => a + b) / readings.length;
+
+    if (average <= 0.7) {
+      this.forward = false;
+      this.stop = true;
+    } else {
+      this.forward = true;
+      this.stop = false;
     }
-    this.forward = true;
-    this.stop = false;
   }
 }

@@ -86,10 +86,7 @@ export default function IndexCanvas({ width, height }: IndexCanvasProps) {
       context.translate(0, height - 200 - main_car_ref.current.y);
 
       // Update the bot
-      main_car_ref.current.controls.update(
-        rays_ref.current.readings,
-        main_car_ref.current
-      );
+      main_car_ref.current.controls.update(rays_ref.current.readings);
 
       // Update the car
       main_car_ref.current.update();
