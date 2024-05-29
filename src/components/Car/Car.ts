@@ -1,9 +1,4 @@
-import {
-  CarInterface,
-  CarControlsInterface,
-  CarStatsInterface,
-  Line,
-} from '@/types';
+import { ICarStats, Line } from '@/types';
 import CarControls from '@/components/Car/CarControls';
 import { calcDragAcceleration } from '@/lib/useEquations';
 import {
@@ -30,14 +25,17 @@ interface CarProps {
   width?: number;
   height?: number;
   isTraffic?: boolean;
+  isBot?: boolean;
 }
 
-export default class Car implements CarInterface {
+export default class Car {
   // Car Size
   x: number;
   y: number;
   width: number;
   height: number;
+
+  cleanup?: () => void;
 
   // Car Attributes
   frontal_area: number;
@@ -55,15 +53,19 @@ export default class Car implements CarInterface {
   angle: number;
 
   // Car Controls
-  controls: CarControlsInterface | ACC_Bot;
+  controls: CarControls | ACC_Bot;
 
   isTraffic: boolean;
+  isBot: boolean;
+
   traffic_constant_speed: number;
 
   borders: Line[];
 
-  constructor({ x, y, width, height, isTraffic }: CarProps = {}) {
+  constructor({ x, y, width, height, isTraffic, isBot }: CarProps = {}) {
     this.isTraffic = isTraffic || false;
+    this.isBot = isBot || false;
+
     this.x = x || 0;
     this.y = y || this.randomPosition();
     this.width = width || 100;
@@ -80,7 +82,7 @@ export default class Car implements CarInterface {
     this.drag_acceleration = 0;
     this.traffic_constant_speed = this.randomSpeed();
 
-    this.controls = new CarControls();
+    this.controls = this.setupControls();
     this.borders = this.getBorders();
   }
 
@@ -101,23 +103,37 @@ export default class Car implements CarInterface {
     return Math.max(min_speed, 0.5 + Math.random() * this.maxSpeed - 0.5);
   }
 
-  setupControls({ isBot = false }: { isBot?: boolean }) {
+  private setupControls(): CarControls | ACC_Bot {
     // If the car is a bot, use the ACC_Bot controls
-    if (isBot) {
-      this.controls = new ACC_Bot();
-      return;
+    if (this.isTraffic) {
+      return new ACC_Bot();
     }
-    // If the car is not a bot, bind the keys to the CarControls
+
+    if (this.isBot) {
+      return new ACC_Bot();
+    } else {
+      // If the car is not a bot, use the CarControls
+      const controls = new CarControls();
+      this.bindKeyboardEvents(controls);
+      return controls;
+    }
+  }
+
+  private bindKeyboardEvents(controls: CarControls) {
+    // This method will bind the keyboard events to the provided controls
+    // Ensure this runs only on client-side where 'window' is defined
     if (typeof window !== 'undefined') {
-      const handle_key_down_bound = this.controls.handleKeyDown.bind(
-        this.controls
-      );
-      const handle_key_up_bound = this.controls.handleKeyUp.bind(this.controls);
+      const handle_key_down_bound = (event: KeyboardEvent) =>
+        controls.handleKeyDown(event);
+      const handle_key_up_bound = (event: KeyboardEvent) =>
+        controls.handleKeyUp(event);
 
       window.addEventListener('keydown', handle_key_down_bound);
       window.addEventListener('keyup', handle_key_up_bound);
 
-      return () => {
+      // Optionally, to properly clean up, you should keep a reference to these functions
+      // so they can be removed later when the component unmounts or controls change
+      this.cleanup = () => {
         window.removeEventListener('keydown', handle_key_down_bound);
         window.removeEventListener('keyup', handle_key_up_bound);
       };
@@ -167,7 +183,7 @@ export default class Car implements CarInterface {
     this.borders = this.getBorders();
   }
 
-  getStats(): CarStatsInterface {
+  getStats(): ICarStats {
     return {
       speed: this.speed,
       acceleration: this.acceleration,

@@ -63,9 +63,6 @@ export default function IndexCanvas({ width, height }: IndexCanvasProps) {
   const rays_ref = useRef(rays);
   const car_controls_ref = useRef(car_controls);
 
-  // main car has controls
-  main_car.setupControls({ isBot: false });
-
   useKeybindings(car_controls_ref);
 
   useEffect(() => {

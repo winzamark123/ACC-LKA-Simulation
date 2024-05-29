@@ -1,4 +1,4 @@
-export interface CarStatsInterface {
+export interface ICarStats {
   speed: number;
   acceleration: number;
   angle: number;
@@ -27,46 +27,6 @@ export type Line = {
   start: Point;
   end: Point;
 };
-
-export interface CarInterface {
-  // Car Size
-  x: number;
-  y: number;
-  width: number;
-  height: number;
-
-  // Car Attributes
-  frontal_area: number;
-  mass: number;
-  maxSpeed: number;
-  ACCELERATION_RATE: number;
-  TURNING_RATE: number;
-  BRAKING_RATE: number;
-
-  // Car Movement
-  speed: number;
-  acceleration: number;
-
-  drag_acceleration: number;
-  angle: number;
-
-  // Car Controls
-  controls: CarControlsInterface | I_ACC_Bot;
-
-  isTraffic: boolean;
-  traffic_constant_speed: number;
-
-  borders: Line[];
-}
-
-export interface CarControlsInterface {
-  forward: boolean;
-  stop: boolean;
-  left: boolean;
-  right: boolean;
-  handleKeyDown(event: KeyboardEvent): void;
-  handleKeyUp(event: KeyboardEvent): void;
-}
 export interface RaySensorInterface {
   car: Car;
   rayCount: number;

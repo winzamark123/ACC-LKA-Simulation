@@ -1,6 +1,4 @@
-import { CarControlsInterface } from '@/types';
-
-export default class CarControls implements CarControlsInterface {
+export default class CarControls {
   forward: boolean;
   stop: boolean;
   left: boolean;
