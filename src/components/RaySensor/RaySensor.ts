@@ -1,9 +1,9 @@
 import { getIntersection, linear_extrapolation } from '@/lib/useEquations';
-import { Line, RaySensorInterface, CarInterface } from '@/types';
+import { Line, RaySensorInterface } from '@/types';
 import Car from '@/components/Car/Car';
 
 export default class RaySensor implements RaySensorInterface {
-  car: CarInterface;
+  car: Car;
   rayCount: number;
   rayLength: number;
   rayAngleSpread: number;
@@ -11,7 +11,7 @@ export default class RaySensor implements RaySensorInterface {
   rays: Line[];
   readings: number[];
 
-  constructor(car: CarInterface) {
+  constructor(car: Car) {
     this.car = car;
     this.rayCount = 5;
     this.rayLength = 200;

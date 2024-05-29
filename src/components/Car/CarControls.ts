@@ -1,6 +1,4 @@
-import { CarControlsInterface } from '@/types';
-
-export default class CarControls implements CarControlsInterface {
+export default class CarControls {
   forward: boolean;
   stop: boolean;
   left: boolean;
@@ -12,6 +10,7 @@ export default class CarControls implements CarControlsInterface {
     this.left = false;
     this.right = false;
   }
+  update() {}
 
   handleKeyDown(event: KeyboardEvent) {
     switch (event.key) {

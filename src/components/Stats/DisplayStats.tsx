@@ -1,13 +1,13 @@
 import Car from '@/components/Car/Car';
 import { useEffect, useState } from 'react';
-import { CarStatsInterface } from '@/types';
+import { ICarStats } from '@/types';
 
 interface DisplayStatsProps {
   carRef: React.MutableRefObject<Car>;
 }
 
 export default function DisplayStats({ carRef }: DisplayStatsProps) {
-  const [car_stats, set_car_stats] = useState<CarStatsInterface | null>(null);
+  const [car_stats, set_car_stats] = useState<ICarStats | null>(null);
 
   useEffect(() => {
     const car = carRef.current;

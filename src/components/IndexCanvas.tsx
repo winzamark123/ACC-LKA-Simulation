@@ -19,6 +19,7 @@ function initComponents(height: number) {
     y: height - 100,
     width: 50,
     height: 100,
+    isBot: true,
   });
   const rays = new RaySensor(main_car);
   const car_controls = new CarControls();
@@ -63,9 +64,6 @@ export default function IndexCanvas({ width, height }: IndexCanvasProps) {
   const rays_ref = useRef(rays);
   const car_controls_ref = useRef(car_controls);
 
-  // main car has controls
-  main_car.setupControls();
-
   useKeybindings(car_controls_ref);
 
   useEffect(() => {
@@ -82,19 +80,27 @@ export default function IndexCanvas({ width, height }: IndexCanvasProps) {
     }
 
     const draw = () => {
-      // UPDATING STATES
+      // UPDATING The Canvas
       context.clearRect(0, 0, canvas.width, canvas.height);
       context.save();
       context.translate(0, height - 200 - main_car_ref.current.y);
-      main_car_ref.current.update(); // Update car state
 
+      // Update the bot
+      main_car_ref.current.controls.update(rays_ref.current.readings);
+
+      // Update the car
+      main_car_ref.current.update();
+
+      // Update the traffic
       for (const car of traffic) {
         car.update();
       }
 
-      rays_ref.current.updateRays(road_ref.current.borders, traffic); // Update the rays
+      // Update the rays
+      rays_ref.current.updateRays(road_ref.current.borders, traffic);
 
       // DRAWING CODE
+      //////////////////////////////////////
       for (const car of traffic) {
         car.draw(context);
       }
@@ -105,6 +111,7 @@ export default function IndexCanvas({ width, height }: IndexCanvasProps) {
       context.restore();
 
       requestAnimationFrame(draw);
+      //////////////////////////////////////
     };
 
     draw();
