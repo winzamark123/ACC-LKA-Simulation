@@ -9,6 +9,7 @@ import {
 } from '@/lib/physicsConstants';
 
 import ACC_Bot from '../Bot/ACC_Bot';
+import Cruise_steering from '../Bot/Cruise_steering';
 
 /*
   Typical Car with the following parameters:
@@ -43,7 +44,7 @@ export default class Car {
   maxSpeed: number;
   ACCELERATION_RATE: number = 0.03;
   TURNING_RATE: number = 0.01;
-  BRAKING_RATE: number = 0.05;
+  BRAKING_RATE: number = 0.15;
 
   // Car Movement
   speed: number;
@@ -110,7 +111,9 @@ export default class Car {
     }
 
     if (this.isBot) {
-      return new ACC_Bot();
+      const controls = new ACC_Bot();
+      this.bindKeyboardEvents(controls);
+      return controls;
     } else {
       // If the car is not a bot, use the CarControls
       const controls = new CarControls();
@@ -119,7 +122,7 @@ export default class Car {
     }
   }
 
-  private bindKeyboardEvents(controls: CarControls) {
+  private bindKeyboardEvents(controls: CarControls | Cruise_steering) {
     // This method will bind the keyboard events to the provided controls
     // Ensure this runs only on client-side where 'window' is defined
     if (typeof window !== 'undefined') {
@@ -223,12 +226,13 @@ export default class Car {
   move() {
     // Car Controls Forward
     if (this.controls.forward) {
+      // this.accelerate();
       this.speed += this.ACCELERATION_RATE;
     }
 
     // Car Controls Backward
     if (this.controls.stop) {
-      this.speed -= this.BRAKING_RATE;
+      this.speed -= this.ACCELERATION_RATE;
     }
 
     // Car Drag
@@ -246,6 +250,10 @@ export default class Car {
       this.speed -= this.drag_acceleration + friction_acceleration;
     }
 
+    // if (this.speed >= 0) {
+    //   if (this.speed == 0) this.speed += this.acceleration;
+    //   this.speed += (this.speed * this.acceleration) / 1000;
+    // }
     // Speed Limits
     if (this.speed < 0) {
       this.speed = 0;
