@@ -55,8 +55,8 @@ export default class Car {
   // Car Controls
   controls: CarControls | ACC_Bot;
 
-  isTraffic: boolean;
   isBot: boolean;
+  isTraffic: boolean;
 
   traffic_constant_speed: number;
 

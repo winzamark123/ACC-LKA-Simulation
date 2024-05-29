@@ -13,13 +13,12 @@ export default class ACC_Bot {
     this.right = false;
   }
 
-  handleKeyDown(): void {}
-  handleKeyUp(): void {}
-
-  determineAction(readings: number[], car: Car) {
+  update(readings: number[], car: Car) {
     for (const reading in readings) {
+      console.log('ACC_Bot: update: reading: ', Number(reading));
       const calc_y = Number(reading) * Math.sin(car.angle);
-      if (calc_y >= 0.3) {
+      if (calc_y >= 0.7) {
+        console.log('ACC_Bot: update: reading: ', reading);
         this.forward = false;
         this.stop = true;
       }

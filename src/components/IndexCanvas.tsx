@@ -19,6 +19,7 @@ function initComponents(height: number) {
     y: height - 100,
     width: 50,
     height: 100,
+    isBot: true,
   });
   const rays = new RaySensor(main_car);
   const car_controls = new CarControls();
@@ -83,6 +84,12 @@ export default function IndexCanvas({ width, height }: IndexCanvasProps) {
       context.clearRect(0, 0, canvas.width, canvas.height);
       context.save();
       context.translate(0, height - 200 - main_car_ref.current.y);
+
+      // Update the bot
+      main_car_ref.current.controls.update(
+        rays_ref.current.readings,
+        main_car_ref.current
+      );
 
       // Update the car
       main_car_ref.current.update();

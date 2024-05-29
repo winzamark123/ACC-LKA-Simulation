@@ -10,6 +10,7 @@ export default class CarControls {
     this.left = false;
     this.right = false;
   }
+  update() {}
 
   handleKeyDown(event: KeyboardEvent) {
     switch (event.key) {
