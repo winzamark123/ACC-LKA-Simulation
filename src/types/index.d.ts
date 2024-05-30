@@ -1,3 +1,10 @@
+export interface IPID {
+  kp: number;
+  ki: number;
+  kd: number;
+  previous_error: number;
+  integral: number;
+}
 export interface ICarStats {
   speed: number;
   acceleration: number;
