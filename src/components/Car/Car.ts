@@ -245,10 +245,6 @@ export default class Car {
 
     // if the target is not set, then set target location
     switching_to_right: if (this.switch_to_right) {
-      if (this.switch_to_left == true) {
-        this.switch_to_left = false;
-        this.target = -1;
-      }
       if (this.target <= 0) {
         for (var i = 0; i < this.roadConstants.length; i++) {
           var roadconstant = this.roadConstants[i] - this.SWITCHING_LANE_ERROR;
@@ -265,6 +261,7 @@ export default class Car {
       }
       if (this.controls.can_turn_right) {
         this.controls.right = true;
+        this.controls.left = false;
 
         if (
           this.angle >= -0.01 &&
@@ -281,7 +278,17 @@ export default class Car {
           this.controls.right = false;
         }
       }
-      console.log(this.target);
+      if (!this.controls.can_turn_right) {
+        if (this.angle >= 0) {
+          this.controls.right = false;
+          this.controls.left = true;
+        }
+        if (this.angle >= -0.01 && this.angle <= 0.01) {
+          this.angle = 0;
+        }
+      }
+      console.log('this.controls.right: ', this.controls.right);
+      console.log('this.controls.left: ', this.controls.left);
     }
 
     switching_to_left: if (this.switch_to_left) {
@@ -298,7 +305,6 @@ export default class Car {
           }
           //no target found, implies car is on the leftmost lane
         }
-        console.log(this.target);
         if (this.target == -1) {
           this.switch_to_left = false;
           break switching_to_left;
@@ -306,6 +312,7 @@ export default class Car {
       }
       if (this.controls.can_turn_left) {
         this.controls.left = true;
+        this.controls.right = false;
 
         if (
           this.angle >= -0.01 &&
@@ -321,15 +328,18 @@ export default class Car {
           this.controls.left = false;
           this.controls.right = true;
         }
+        if (!this.controls.can_turn_left) {
+          if (this.angle <= 0) {
+            this.controls.left = false;
+            this.controls.right = true;
+          }
+          if (this.angle >= -0.01 && this.angle <= 0.01) {
+            this.angle = 0;
+          }
+        }
       }
     }
-    // } else if (this.switch_to_right && this.angle >= 0) {
-    //   this.controls.right = false;
-    //   this.controls.left = true;
-    // } else if (this.switch_to_right && this.angle >= 0) {
-    //   this.angle = 0;
-    // }
-    // Car Controls Forward
+
     if (this.controls.forward) {
       // this.accelerate();
       this.speed += this.ACCELERATION_RATE;

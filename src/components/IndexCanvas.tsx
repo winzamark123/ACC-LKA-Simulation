@@ -64,7 +64,7 @@ export default function IndexCanvas({ width, height }: IndexCanvasProps) {
   const canvas_ref = useRef<HTMLCanvasElement | null>(null);
   const { road, main_car, rays, rightrays, leftrays, car_controls } =
     initComponents(height);
-  const traffic = createTraffic(road, 10);
+  const traffic = createTraffic(road, 15);
 
   const road_ref = useRef(road);
   const main_car_ref = useRef(main_car);
