@@ -42,9 +42,12 @@ export default class Car {
   frontal_area: number;
   mass: number;
   maxSpeed: number;
+  maxAngle: number;
+  minAngle: number;
   ACCELERATION_RATE: number = 0.03;
-  TURNING_RATE: number = 0.01;
+  TURNING_RATE: number = 0.001;
   BRAKING_RATE: number = 0.15;
+  SWITCHING_LANE_ERROR: number = 50;
 
   // Car Movement
   speed: number;
@@ -58,9 +61,11 @@ export default class Car {
 
   isBot: boolean;
   isTraffic: boolean;
+  roadConstants: number[];
+  target: number;
 
   traffic_constant_speed: number;
-
+  switch_to_right: boolean;
   borders: Line[];
 
   constructor({ x, y, width, height, isTraffic, isBot }: CarProps = {}) {
@@ -71,20 +76,24 @@ export default class Car {
     this.y = y || this.randomPosition();
     this.width = width || 100;
     this.height = height || this.randomSize();
-
+    this.roadConstants = [83.33333333333333, 250, 416.66666666666663];
     this.maxSpeed = 3;
     this.mass = 1500;
     this.frontal_area = 5;
+    this.target = -1;
 
     this.speed = 0;
     this.acceleration = 0;
     this.angle = 0;
+    this.maxAngle = 0.2;
+    this.minAngle = -0.2;
 
     this.drag_acceleration = 0;
     this.traffic_constant_speed = this.randomSpeed();
 
     this.controls = this.setupControls();
     this.borders = this.getBorders();
+    this.switch_to_right = false;
   }
 
   private randomPosition(): number {
@@ -100,7 +109,7 @@ export default class Car {
   }
 
   private randomSpeed() {
-    const min_speed = 0.5;
+    const min_speed = 1.5;
     return Math.max(min_speed, 0.5 + Math.random() * this.maxSpeed - 0.5);
   }
 
@@ -122,7 +131,7 @@ export default class Car {
     }
   }
 
-  private bindKeyboardEvents(controls: CarControls | Cruise_steering) {
+  private bindKeyboardEvents(controls: CarControls | ACC_Bot) {
     // This method will bind the keyboard events to the provided controls
     // Ensure this runs only on client-side where 'window' is defined
     if (typeof window !== 'undefined') {
@@ -224,6 +233,48 @@ export default class Car {
   }
 
   move() {
+    //max angle limited so that the car doesnt have sudden turn movements
+    if (this.angle >= this.maxAngle) {
+      this.angle = this.maxAngle;
+    }
+    if (this.angle <= this.minAngle) {
+      this.angle = this.minAngle;
+    }
+
+    // if the target is not set, then set target location
+    if (this.switch_to_right && this.target <= 0) {
+      for (var i = 0; i < this.roadConstants.length; i++) {
+        var roadconstant = this.roadConstants[i] - this.SWITCHING_LANE_ERROR;
+        if (roadconstant >= this.x) {
+          this.target = roadconstant;
+          break;
+        }
+        //no target found, implies car is on the rightmost lane
+        if (this.target == -1) {
+          this.switch_to_right = false;
+        }
+      }
+    }
+    if (this.switch_to_right && this.controls.can_turn_right) {
+      this.controls.right = true;
+
+      if (this.angle >= -0.01 && this.angle <= 0.01 && this.x >= this.target) {
+        this.angle = 0;
+        this.controls.left = false;
+        this.controls.right = false;
+        this.switch_to_right = false;
+        this.target = -1;
+      } else if (this.x >= this.target) {
+        this.controls.left = true;
+        this.controls.right = false;
+      }
+    }
+    // } else if (this.switch_to_right && this.angle >= 0) {
+    //   this.controls.right = false;
+    //   this.controls.left = true;
+    // } else if (this.switch_to_right && this.angle >= 0) {
+    //   this.angle = 0;
+    // }
     // Car Controls Forward
     if (this.controls.forward) {
       // this.accelerate();

@@ -3,8 +3,10 @@ import Car from './Car/Car';
 import Road from './Road/Road';
 import CarControls from './Car/CarControls';
 import RaySensor from './RaySensor/RaySensor';
+import RightSensor from './SideSensor/RightSensor';
 import DisplayStats from './Stats/DisplayStats';
 import { createTraffic } from './Traffic/Traffic';
+import LeftSensor from './SideSensor/LeftSensor';
 
 interface IndexCanvasProps {
   width: number;
@@ -15,19 +17,23 @@ interface IndexCanvasProps {
 function initComponents(height: number) {
   const road = new Road(300, 500);
   const main_car = new Car({
-    x: road.getLaneCenter(1),
+    x: road.getLaneCenter(0),
     y: height - 100,
     width: 50,
     height: 100,
     isBot: true,
   });
   const rays = new RaySensor(main_car);
+  const rightrays = new RightSensor(main_car);
+  const leftrays = new LeftSensor(main_car);
   const car_controls = new CarControls();
 
   return {
     road,
     main_car,
     rays,
+    rightrays,
+    leftrays,
     car_controls,
   };
 }
@@ -56,11 +62,14 @@ function useKeybindings(car_controls_ref: React.MutableRefObject<CarControls>) {
 
 export default function IndexCanvas({ width, height }: IndexCanvasProps) {
   const canvas_ref = useRef<HTMLCanvasElement | null>(null);
-  const { road, main_car, rays, car_controls } = initComponents(height);
-  const traffic = createTraffic(road, 10);
+  const { road, main_car, rays, rightrays, leftrays, car_controls } =
+    initComponents(height);
+  const traffic = createTraffic(road, 50);
 
   const road_ref = useRef(road);
   const main_car_ref = useRef(main_car);
+  const rightrays_ref = useRef(rightrays);
+  const leftrays_ref = useRef(leftrays);
   const rays_ref = useRef(rays);
   const car_controls_ref = useRef(car_controls);
 
@@ -86,7 +95,11 @@ export default function IndexCanvas({ width, height }: IndexCanvasProps) {
       context.translate(0, height - 200 - main_car_ref.current.y);
 
       // Update the bot
-      main_car_ref.current.controls.update(rays_ref.current.readings);
+      main_car_ref.current.controls.update(
+        rays_ref.current.readings,
+        rightrays_ref.current.readings,
+        leftrays_ref.current.readings
+      );
 
       // Update the car
       main_car_ref.current.update();
@@ -98,6 +111,8 @@ export default function IndexCanvas({ width, height }: IndexCanvasProps) {
 
       // Update the rays
       rays_ref.current.updateRays(road_ref.current.borders, traffic);
+      rightrays_ref.current.updateRays(road_ref.current.borders, traffic);
+      leftrays_ref.current.updateRays(road_ref.current.borders, traffic);
 
       // DRAWING CODE
       //////////////////////////////////////
@@ -107,6 +122,8 @@ export default function IndexCanvas({ width, height }: IndexCanvasProps) {
       road_ref.current.draw(context);
       main_car_ref.current.draw(context);
       rays_ref.current.draw(context);
+      rightrays_ref.current.draw(context);
+      leftrays_ref.current.draw(context);
 
       context.restore();
 
@@ -116,7 +133,10 @@ export default function IndexCanvas({ width, height }: IndexCanvasProps) {
 
     draw();
   }, []);
-
+  function SwitchRight() {
+    main_car_ref.current.switch_to_right = true;
+    console.log('button pressed, switching to right!');
+  }
   return (
     <main className="flex border border-black">
       <canvas
@@ -128,6 +148,7 @@ export default function IndexCanvas({ width, height }: IndexCanvasProps) {
       <div className="border border-red-300">
         <DisplayStats carRef={main_car_ref} />
       </div>
+      <button onClick={SwitchRight}>Switch to right</button>
     </main>
   );
 }

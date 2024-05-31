@@ -3,15 +3,23 @@ export default class ACC_Bot {
   stop: boolean;
   left: boolean;
   right: boolean;
+  can_turn_right: boolean;
+  can_turn_left: boolean;
 
   constructor() {
     this.forward = false;
     this.stop = false;
     this.left = false;
     this.right = false;
+    this.can_turn_right = false;
+    this.can_turn_left = false;
   }
 
-  update(readings: number[]) {
+  update(
+    readings: number[],
+    rightsidereadings: number[],
+    leftsidereadings: number[]
+  ) {
     const average = readings.reduce((a, b) => a + b) / readings.length;
     const avg_center = (readings[1] + readings[2] + readings[3]) / 3;
     if (average <= 0.7 || avg_center < 0.95) {
@@ -20,6 +28,22 @@ export default class ACC_Bot {
     } else {
       this.forward = true;
       this.stop = false;
+    }
+
+    const rightsideaverage =
+      rightsidereadings.reduce((a, b) => a + b) / rightsidereadings.length;
+    if (rightsideaverage <= 0.99) {
+      this.can_turn_right = false;
+    } else {
+      this.can_turn_right = true;
+    }
+
+    const leftsideaverage =
+      leftsidereadings.reduce((a, b) => a + b) / leftsidereadings.length;
+    if (leftsideaverage <= 0.99) {
+      this.can_turn_left = false;
+    } else {
+      this.can_turn_left = true;
     }
   }
   handleKeyUp(event: KeyboardEvent) {
