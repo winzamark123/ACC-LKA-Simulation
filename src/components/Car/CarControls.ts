@@ -4,6 +4,7 @@ export default class CarControls {
   left: boolean;
   right: boolean;
   can_turn_right: boolean;
+  can_turn_left: boolean;
 
   constructor() {
     this.forward = false;
@@ -11,6 +12,7 @@ export default class CarControls {
     this.left = false;
     this.right = false;
     this.can_turn_right = false;
+    this.can_turn_left = false;
   }
   update() {}
 

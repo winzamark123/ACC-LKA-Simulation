@@ -66,6 +66,7 @@ export default class Car {
 
   traffic_constant_speed: number;
   switch_to_right: boolean;
+  switch_to_left: boolean;
   borders: Line[];
 
   constructor({ x, y, width, height, isTraffic, isBot }: CarProps = {}) {
@@ -76,7 +77,7 @@ export default class Car {
     this.y = y || this.randomPosition();
     this.width = width || 100;
     this.height = height || this.randomSize();
-    this.roadConstants = [83.33333333333333, 250, 416.66666666666663];
+    this.roadConstants = [120, 250, 416.66666666666663];
     this.maxSpeed = 3;
     this.mass = 1500;
     this.frontal_area = 5;
@@ -94,6 +95,7 @@ export default class Car {
     this.controls = this.setupControls();
     this.borders = this.getBorders();
     this.switch_to_right = false;
+    this.switch_to_left = false;
   }
 
   private randomPosition(): number {
@@ -242,31 +244,83 @@ export default class Car {
     }
 
     // if the target is not set, then set target location
-    if (this.switch_to_right && this.target <= 0) {
-      for (var i = 0; i < this.roadConstants.length; i++) {
-        var roadconstant = this.roadConstants[i] - this.SWITCHING_LANE_ERROR;
-        if (roadconstant >= this.x) {
-          this.target = roadconstant;
-          break;
+    switching_to_right: if (this.switch_to_right) {
+      if (this.switch_to_left == true) {
+        this.switch_to_left = false;
+        this.target = -1;
+      }
+      if (this.target <= 0) {
+        for (var i = 0; i < this.roadConstants.length; i++) {
+          var roadconstant = this.roadConstants[i] - this.SWITCHING_LANE_ERROR;
+          if (roadconstant >= this.x) {
+            this.target = roadconstant;
+            break;
+          }
         }
         //no target found, implies car is on the rightmost lane
         if (this.target == -1) {
           this.switch_to_right = false;
+          break switching_to_right;
         }
       }
-    }
-    if (this.switch_to_right && this.controls.can_turn_right) {
-      this.controls.right = true;
+      if (this.controls.can_turn_right) {
+        this.controls.right = true;
 
-      if (this.angle >= -0.01 && this.angle <= 0.01 && this.x >= this.target) {
-        this.angle = 0;
-        this.controls.left = false;
-        this.controls.right = false;
+        if (
+          this.angle >= -0.01 &&
+          this.angle <= 0.01 &&
+          this.x >= this.target
+        ) {
+          this.angle = 0;
+          this.controls.left = false;
+          this.controls.right = false;
+          this.switch_to_right = false;
+          this.target = -1;
+        } else if (this.x >= this.target && this.target != -1) {
+          this.controls.left = true;
+          this.controls.right = false;
+        }
+      }
+      console.log(this.target);
+    }
+
+    switching_to_left: if (this.switch_to_left) {
+      if (this.switch_to_right == true) {
         this.switch_to_right = false;
         this.target = -1;
-      } else if (this.x >= this.target) {
+      }
+      if (this.target <= 0) {
+        for (var i = this.roadConstants.length; i >= 0; i--) {
+          var roadconstant = this.roadConstants[i] + this.SWITCHING_LANE_ERROR;
+          if (roadconstant <= this.x) {
+            this.target = roadconstant;
+            break;
+          }
+          //no target found, implies car is on the leftmost lane
+        }
+        console.log(this.target);
+        if (this.target == -1) {
+          this.switch_to_left = false;
+          break switching_to_left;
+        }
+      }
+      if (this.controls.can_turn_left) {
         this.controls.left = true;
-        this.controls.right = false;
+
+        if (
+          this.angle >= -0.01 &&
+          this.angle <= 0.01 &&
+          this.x <= this.target
+        ) {
+          this.angle = 0;
+          this.controls.left = false;
+          this.controls.right = false;
+          this.switch_to_left = false;
+          this.target = -1;
+        } else if (this.x <= this.target) {
+          this.controls.left = false;
+          this.controls.right = true;
+        }
       }
     }
     // } else if (this.switch_to_right && this.angle >= 0) {

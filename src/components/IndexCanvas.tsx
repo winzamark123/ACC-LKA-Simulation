@@ -1,4 +1,4 @@
-import { useRef, useEffect } from 'react';
+import { useRef, useEffect, useState } from 'react';
 import Car from './Car/Car';
 import Road from './Road/Road';
 import CarControls from './Car/CarControls';
@@ -64,7 +64,7 @@ export default function IndexCanvas({ width, height }: IndexCanvasProps) {
   const canvas_ref = useRef<HTMLCanvasElement | null>(null);
   const { road, main_car, rays, rightrays, leftrays, car_controls } =
     initComponents(height);
-  const traffic = createTraffic(road, 50);
+  const traffic = createTraffic(road, 10);
 
   const road_ref = useRef(road);
   const main_car_ref = useRef(main_car);
@@ -72,7 +72,7 @@ export default function IndexCanvas({ width, height }: IndexCanvasProps) {
   const leftrays_ref = useRef(leftrays);
   const rays_ref = useRef(rays);
   const car_controls_ref = useRef(car_controls);
-
+  const [turns, SetTurns] = useState('none');
   useKeybindings(car_controls_ref);
 
   useEffect(() => {
@@ -114,6 +114,10 @@ export default function IndexCanvas({ width, height }: IndexCanvasProps) {
       rightrays_ref.current.updateRays(road_ref.current.borders, traffic);
       leftrays_ref.current.updateRays(road_ref.current.borders, traffic);
 
+      SetTurns('center');
+      if (main_car_ref.current.switch_to_left) SetTurns('left');
+      if (main_car_ref.current.switch_to_right) SetTurns('right');
+
       // DRAWING CODE
       //////////////////////////////////////
       for (const car of traffic) {
@@ -137,18 +141,43 @@ export default function IndexCanvas({ width, height }: IndexCanvasProps) {
     main_car_ref.current.switch_to_right = true;
     console.log('button pressed, switching to right!');
   }
+  function SwitchLeft() {
+    main_car_ref.current.switch_to_left = true;
+    console.log('button pressed, switching to left!');
+  }
+
+  function Buttons() {
+    if (turns == 'center') {
+      return (
+        <>
+          <button className="border border-black p-10 " onClick={SwitchLeft}>
+            Switch to left
+          </button>
+          <button className="border border-black p-10" onClick={SwitchRight}>
+            Switch to right
+          </button>
+        </>
+      );
+    } else {
+      return <div className="p-10">Switching to {turns}...</div>;
+    }
+  }
   return (
-    <main className="flex border border-black">
-      <canvas
-        ref={canvas_ref}
-        className="border border-blue-400"
-        width={width}
-        height={height}
-      ></canvas>
-      <div className="border border-red-300">
-        <DisplayStats carRef={main_car_ref} />
+    <main className="">
+      <div className="flex border border-black">
+        <canvas
+          ref={canvas_ref}
+          className="border border-blue-400"
+          width={width}
+          height={height}
+        ></canvas>
+        <div className="border border-red-300">
+          <DisplayStats carRef={main_car_ref} />
+        </div>
       </div>
-      <button onClick={SwitchRight}>Switch to right</button>
+      <div className="border border-black text-3xl">
+        <Buttons />
+      </div>
     </main>
   );
 }

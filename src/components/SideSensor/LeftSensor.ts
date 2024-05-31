@@ -32,7 +32,7 @@ export default class LeftSensor implements RaySensorInterface {
           this.rayCount == 1 ? 0.5 : i / (this.rayCount - 1)
         ) +
         this.car.angle +
-        Math.PI ;
+        Math.PI;
       const start = {
         x: this.car.x + this.car.width / 2,
         y: this.car.y + this.car.height / 2,
@@ -65,16 +65,16 @@ export default class LeftSensor implements RaySensorInterface {
     const readings = [];
 
     // Check for intersections with borders
-    for (const border of borders) {
-      const intersection = getIntersection(ray, border);
-      if (intersection) {
-        const distance = Math.sqrt(
-          (intersection.x - ray.start.x) ** 2 +
-            (intersection.y - ray.start.y) ** 2
-        );
-        readings.push(distance);
-      }
-    }
+    // for (const border of borders) {
+    //   const intersection = getIntersection(ray, border);
+    //   if (intersection) {
+    //     const distance = Math.sqrt(
+    //       (intersection.x - ray.start.x) ** 2 +
+    //         (intersection.y - ray.start.y) ** 2
+    //     );
+    //     readings.push(distance);
+    //   }
+    // }
     // Check for intersections with traffic
     for (const car of traffic) {
       const front_intersection = getIntersection(ray, car.borders[0]);
