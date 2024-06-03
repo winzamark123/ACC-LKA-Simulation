@@ -3,12 +3,16 @@ export default class CarControls {
   stop: boolean;
   left: boolean;
   right: boolean;
+  can_turn_right: boolean;
+  can_turn_left: boolean;
 
   constructor() {
     this.forward = false;
     this.stop = false;
     this.left = false;
     this.right = false;
+    this.can_turn_right = false;
+    this.can_turn_left = false;
   }
   update() {}
 
