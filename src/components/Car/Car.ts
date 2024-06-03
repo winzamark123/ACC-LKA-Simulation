@@ -328,14 +328,14 @@ export default class Car {
           this.controls.left = false;
           this.controls.right = true;
         }
-        if (!this.controls.can_turn_left) {
-          if (this.angle <= 0) {
-            this.controls.left = false;
-            this.controls.right = true;
-          }
-          if (this.angle >= -0.01 && this.angle <= 0.01) {
-            this.angle = 0;
-          }
+      }
+      if (!this.controls.can_turn_left) {
+        if (this.angle <= 0) {
+          this.controls.left = false;
+          this.controls.right = true;
+        }
+        if (this.angle >= -0.01 && this.angle <= 0.01) {
+          this.angle = 0;
         }
       }
     }
