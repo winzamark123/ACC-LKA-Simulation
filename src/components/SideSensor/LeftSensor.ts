@@ -52,7 +52,7 @@ export default class LeftSensor implements RaySensorInterface {
     this.readings.fill(1); // Reset readings to 1
     for (let i = 0; i < this.rays.length; i++) {
       const ray = this.rays[i];
-      const distances = this.getReadings(ray, traffic, borders);
+      const distances = this.getReadings(ray, traffic);
 
       if (distances.length > 0) {
         const min_distance = Math.min(...distances);
@@ -61,7 +61,7 @@ export default class LeftSensor implements RaySensorInterface {
     }
   }
 
-  getReadings(ray: Line, traffic: Car[], borders: Line[]) {
+  getReadings(ray: Line, traffic: Car[]) {
     const readings = [];
 
     // Check for intersections with borders

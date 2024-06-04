@@ -72,7 +72,7 @@ export default function IndexCanvas({ width, height }: IndexCanvasProps) {
   const leftrays_ref = useRef(leftrays);
   const rays_ref = useRef(rays);
   const car_controls_ref = useRef(car_controls);
-  const [turns, SetTurns] = useState('none');
+  const [turns, set_turns] = useState('none');
   useKeybindings(car_controls_ref);
 
   useEffect(() => {
@@ -114,9 +114,9 @@ export default function IndexCanvas({ width, height }: IndexCanvasProps) {
       rightrays_ref.current.updateRays(road_ref.current.borders, traffic);
       leftrays_ref.current.updateRays(road_ref.current.borders, traffic);
 
-      SetTurns('center');
-      if (main_car_ref.current.switch_to_left) SetTurns('left');
-      if (main_car_ref.current.switch_to_right) SetTurns('right');
+      set_turns('center');
+      if (main_car_ref.current.switch_to_left) set_turns('left');
+      if (main_car_ref.current.switch_to_right) set_turns('right');
 
       // DRAWING CODE
       //////////////////////////////////////
@@ -137,6 +137,7 @@ export default function IndexCanvas({ width, height }: IndexCanvasProps) {
 
     draw();
   }, []);
+
   function SwitchRight() {
     main_car_ref.current.switch_to_right = true;
     console.log('button pressed, switching to right!');

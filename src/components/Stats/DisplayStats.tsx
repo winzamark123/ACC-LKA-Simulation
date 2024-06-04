@@ -22,7 +22,7 @@ export default function DisplayStats({ carRef }: DisplayStatsProps) {
   }, [carRef]);
   return (
     <main className="flex border border-black">
-      <div>
+      <div className="text-3xl">
         <h1>STATS</h1>
         <div>
           <h2>Car Stats</h2>

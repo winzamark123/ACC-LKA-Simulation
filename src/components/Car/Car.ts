@@ -9,7 +9,6 @@ import {
 } from '@/lib/physicsConstants';
 
 import ACC_Bot from '../Bot/ACC_Bot';
-import Cruise_steering from '../Bot/Cruise_steering';
 
 /*
   Typical Car with the following parameters:
@@ -246,8 +245,9 @@ export default class Car {
     // if the target is not set, then set target location
     switching_to_right: if (this.switch_to_right) {
       if (this.target <= 0) {
-        for (var i = 0; i < this.roadConstants.length; i++) {
-          var roadconstant = this.roadConstants[i] - this.SWITCHING_LANE_ERROR;
+        for (let i = 0; i < this.roadConstants.length; i++) {
+          const roadconstant =
+            this.roadConstants[i] - this.SWITCHING_LANE_ERROR;
           if (roadconstant >= this.x) {
             this.target = roadconstant;
             break;
@@ -297,8 +297,9 @@ export default class Car {
         this.target = -1;
       }
       if (this.target <= 0) {
-        for (var i = this.roadConstants.length; i >= 0; i--) {
-          var roadconstant = this.roadConstants[i] + this.SWITCHING_LANE_ERROR;
+        for (let i = this.roadConstants.length; i >= 0; i--) {
+          const roadconstant =
+            this.roadConstants[i] + this.SWITCHING_LANE_ERROR;
           if (roadconstant <= this.x) {
             this.target = roadconstant;
             break;
