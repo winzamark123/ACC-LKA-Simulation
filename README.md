@@ -1,36 +1,54 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Adaptive Cruise Control and Lane Keep Assistance Physics Model  
 
-## Getting Started
+#### Members: Teeranade Cheng (Win), Jerry, Sanshray, Aaryan, Aarav
 
-First, run the development server:
+## Table of Contents
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+- [Introduction](#introduction)
+- [Live Demo](#live_demo)
+- [Implementation](#implementation)
+- [Credits](#credits)
+
+## Introduction
+
+<img src="./public/screenshots/drawings1.png" alt="Locks and Concurrency"/>
+
+The Adaptive Cruise Control (ACC) and Lane Keep Assistance (LKA) project is designed to simulate the behavior of modern vehicular control systems in a controlled environment. Our physics model aims to replicate the real-world dynamics of vehicle motion and control mechanisms, providing insights into the effectiveness of these systems in maintaining vehicle stability and safety.
+
+## Live Demo
+<img src="./public/screenshots/live-demo.png" alt="Locks and Concurrency"/>
+Experience our simulation in action by following these setup instructions: 
+
+Go ahead and `git clone` the repositiory. Run `npm install` to install any package dependencies. 
 ```
+npm run dev
+```
+You should now be able to see the car model on `localhost:3000`! Check out the different features we implemented.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Implementation 
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+#### Dynamics Calculation
+Our simulation calculates vehicle dynamics such as acceleration, speed, and directional changes based on the input from the control systems (ACC and LKA). The dynamics are computed using a combination of Newtonian physics and empirical data gathered from real vehicle dynamics.
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+- Friction and Drag: Calculates the impact of road friction and air resistance.
+- Force Application: Applies forces based on control system commands.
 
-## Learn More
+#### Control Systems
+The ACC and LKA systems are implemented using algorithms that detect environmental variables based on rays casted to adjust the vehicle's dynamics accordingly.
 
-To learn more about Next.js, take a look at the following resources:
+- ACC: Maintains a steady speed or adjusts the speed to keep a safe distance from other vehicles.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- LKA: Keeps the vehicle within its lane boundaries by adjusting steering commands.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+<img src="./public/screenshots/physics.png" alt="Locks and Concurrency"/>
 
-## Deploy on Vercel
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Credits 
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+This group project was built to explore the basic implementation of adaptive cruise control and lane keep assistance. We tried to simulate as close to a car physics as possible with the available time constraint that we had. In the future, there could be an integration of PID, distance calculations, 4D Imaging for sensors, etc. Nonetheless, this was another fun project where we built things straight from scratch trying to take what we learn as theory and apply it to the simulation.   
+
+Special Thanks to:
+
+- Developer: Teeranade Cheng (Win): <a href="https://www.linkedin.com/in/teeranade-cheng/" target = "_blank">LinkedIN</a> / <a href="https://github.com/winzamark123" target="_blank">Github</a>
+- Developer: Aaryan : <a href="https://www.linkedin.com/in/diego-rafael-8668b02b1/" target = "_blank">LinkedIN</a> / <a href="https://github.com/Dieg0raf" target="_blank">Github</a>
+- Developer: Aarav : <a href="https://www.linkedin.com/in/nikko-sanchez-85888920b/" target = "_blank">LinkedIN</a> / <a href="https://github.com/nsanchez75" target="_blank">Github</a>
