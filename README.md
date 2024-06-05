@@ -1,6 +1,6 @@
 # Adaptive Cruise Control and Lane Keep Assistance Physics Model
 
-#### Members: Teeranade Cheng (Win), Aaryan Mohta, Aarav Urgaonkar
+#### Members: Teeranade Cheng (Win), Aaryan Mohta, Aarav Urgaonkar, Zhengxiao Yu
 
 ## Table of Contents
 
@@ -56,3 +56,4 @@ Special Thanks to:
 - Developer: Teeranade Cheng (Win): <a href="https://www.linkedin.com/in/teeranade-cheng/" target = "_blank">LinkedIN</a> / <a href="https://github.com/winzamark123" target="_blank">Github</a>
 - Developer: Aaryan Mohta: <a href="https://www.linkedin.com/in/aaryan-mohta/" target = "_blank">LinkedIN</a> / <a href="https://github.com/aaryanmohta04" target="_blank">Github</a>
 - Developer: Aarav Urgaonkar: <a href="https://www.linkedin.com/in/aaravurg/" target = "_blank">LinkedIN</a> / <a href="https://github.com/aaravurg" target="_blank">Github</a>
+- Developer: Zhengxiao Yu: <a href="https://www.linkedin.com/in/zhengxiao-yu-8b21852a1/" target = "_blank">LinkedIN</a> / <a href="https://github.com/yzx32" target="_blank">Github</a>
